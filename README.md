@@ -105,7 +105,6 @@ Let's have a look at this structure:
 
 ```
 ├── /node_modules
-├── /script
 ├── /src                 
 │   ├── /config          # Base configuration such as .env key and sequelize-cli configuration
 │   ├── /database
