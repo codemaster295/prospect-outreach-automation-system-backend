@@ -3,7 +3,7 @@ import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 
 export type UserCreationAttributes = Optional<
     User,
-    'id' | 'email' | 'password'
+    'id' | 'username' 
 >;
 
 export class UserModel
