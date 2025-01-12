@@ -15,8 +15,9 @@
         "boilerplate express sequelize typescript"
     ],
     "scripts": {
-        "start": "ts-node -r tsconfig-paths/register --transpile-only src/server.ts",
+        "start": "npm run build && node dist/server.js",
         "dev": "nodemon",
+        "build": "tsc && tsc-alias && echo 'Build Finished! 👍'",
         "lint": "eslint --ignore-path .gitignore --ext .ts src/",
         "lint:fix": "npm run lint -- --fix",
         "migration:generate": "sequelize migration:generate --name",
@@ -46,7 +47,7 @@
         "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
         "@types/jsonwebtoken": "^9.0.7",
-        "@types/node": "^22.7.6",
+        "@types/node": "^22.10.5",
         "@types/pg": "^8.11.10",
         "@types/sequelize": "^4.28.20",
         "@types/swagger-jsdoc": "^6.0.4",
@@ -60,6 +61,7 @@
         "prettier": "^2.7.1",
         "sequelize-cli": "^6.6.2",
         "ts-node": "^10.9.2",
-        "typescript": "^4.7.4"
+        "tsc-alias": "^1.8.10",
+        "typescript": "^5.7.3"
     }
 }
