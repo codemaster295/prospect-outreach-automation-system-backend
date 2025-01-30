@@ -1,7 +1,7 @@
 {
-    "name": "boilerplate",
+    "name": "express-typescript-sequelize-boilerplate",
     "version": "1.0.0",
-    "description": "Express-Typescript-Postgres-Sequelize-Jest",
+    "description": "Express-Typescript-Postgres-Sequelize Boilerplate",
     "main": "server.ts",
     "keywords": [
         "typescript",
