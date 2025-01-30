@@ -18,7 +18,7 @@ This is a simple boilerplate with **Express.js** with a ready-to-use configurati
 Make sure you have installed the following tools:
 
 - **Node.js** >= v18.x.x  
-- **npm** atau **yarn**
+- **npm**
 
 ---
 
