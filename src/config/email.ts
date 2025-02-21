@@ -6,7 +6,6 @@ import { isEmpty } from 'lodash'
 require('dotenv').config()
 
 const {
-  APP_NAME,
   MAIL_DRIVER,
   MAIL_HOST,
   MAIL_PORT,
@@ -19,6 +18,7 @@ const {
   OAUTH_CLIENT_SECRET,
   OAUTH_REFRESH_TOKEN,
   OAUTH_REDIRECT_URL,
+  MAIL_FROM,
 } = process.env
 
 const isMailgunAPI = !isEmpty(MAILGUN_API_KEY) || !isEmpty(MAILGUN_DOMAIN)
@@ -43,6 +43,7 @@ class EmailProvider {
   private setMailConfig = (): nodemailer.SentMessageInfo => {
     const configTransport: nodemailer.SentMessageInfo = {
       service: MAIL_DRIVER,
+      secure: true,
       auth: {
         user: '',
       },
@@ -92,7 +93,7 @@ class EmailProvider {
     text: string
   ): nodemailer.SendMailOptions => {
     return {
-      from: `${APP_NAME} <${MAIL_USERNAME}>`,
+      from: MAIL_FROM,
       to: dest,
       subject,
       html: text,
