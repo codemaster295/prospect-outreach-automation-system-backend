@@ -1,10 +1,14 @@
-import { signUpService } from '../../../src/modules/auth/auth.service';
+import {
+    signUpService,
+    signInService,
+} from '../../../src/modules/auth/auth.service';
 import { CustomError } from '../../../src/utils/custom-error';
 import repo from '../../../src/modules/auth/auth.repo';
 import { User } from '../../../src/interfaces/user.interfaces';
 import { DB } from '../../../src/database';
-import { hash } from 'bcrypt';
-import { validateSignUp } from '../../../src/modules/auth/auth.validator';
+import { hash, compareSync } from 'bcrypt';
+import { validateSignUp, validateSignIn } from '../../../src/modules/auth/auth.validator';
+import { generateJWT } from '../../../src/middlewares/jwt.service';
 
 jest.mock('../../../src/modules/auth/auth.repo');
 jest.mock('../../../src/database', () => ({
@@ -18,11 +22,15 @@ jest.mock('../../../src/database', () => ({
 
 jest.mock('bcrypt', () => ({
     hash: jest.fn(() => Promise.resolve('hashedPassword')),
+    compareSync: jest.fn(() => true),
 }));
 
 jest.mock('../../../src/modules/auth/auth.validator', () => ({
     validateSignUp: jest.fn(),
+    validateSignIn: jest.fn(() => ({ error: null })), 
 }));
+
+jest.mock('../../../src/middlewares/jwt.service');
 
 afterAll(async () => {
     await DB.sequelize.close();
@@ -99,4 +107,86 @@ describe('signUpService', () => {
         expect(result).toEqual({ user: newUser });
         expect(hash).toHaveBeenCalledWith(userData.password, 10);
     });
+});
+
+describe('signInService', () => {
+    const mockUser: User = {
+        email: 'test@example.com',
+        name: 'Test User',
+        username: 'testuser',
+        password: 'hashed_password',
+        created_at: undefined,
+        updated_at: undefined,
+    };
+
+    it('should return user and accessToken if credentials are correct', async () => {
+        (repo.findUserByEmail as jest.Mock).mockResolvedValue(mockUser);
+        (generateJWT as jest.Mock).mockResolvedValue('mocked_access_token');
+        jest.spyOn(require('bcrypt'), 'compareSync').mockReturnValue(true);
+
+        const result = await signInService({
+            email: 'test@example.com',
+            password: 'correct_password',
+            name: 'Test User',
+            username: 'testuser',
+            created_at: undefined,
+            updated_at: undefined,
+        });
+
+        expect(repo.findUserByEmail).toHaveBeenCalledWith('test@example.com');
+        expect(generateJWT).toHaveBeenCalled();
+        expect(result).toEqual({
+            user: mockUser,
+            accessToken: 'mocked_access_token',
+        });
+    });
+
+    it('should throw 401 error if user is not found', async () => {
+        (repo.findUserByEmail as jest.Mock).mockResolvedValue(null);
+
+        await expect(
+            signInService({
+                email: 'test@example.com',
+                password: 'wrong_password',
+                name: 'Test User',
+                username: 'testuser',
+                created_at: undefined,
+                updated_at: undefined,
+            }),
+        ).rejects.toThrow('Email or password is invalid');
+    });
+
+    it('should throw 401 error if password is incorrect', async () => {
+        (repo.findUserByEmail as jest.Mock).mockResolvedValue(mockUser);
+        jest.spyOn(require('bcrypt'), 'compareSync').mockReturnValue(false);
+
+        await expect(
+            signInService({
+                email: 'test@example.com',
+                password: 'wrong_password',
+                name: 'Test User',
+                username: 'testuser',
+                created_at: undefined,
+                updated_at: undefined,
+            }),
+        ).rejects.toThrow('Email or password is invalid');
+    });
+
+    it('should throw 400 error if validation fails', async () => {
+        (validateSignIn as jest.Mock).mockReturnValue({
+            error: { details: [{ message: 'Email and password are required' }] }
+        });
+    
+        await expect(
+            signInService({
+                email: '',
+                password: '',
+                name: '',
+                username: '',
+                created_at: undefined,
+                updated_at: undefined,
+            }),
+        ).rejects.toThrow('Email and password are required');
+    });
+    
 });
