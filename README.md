@@ -59,7 +59,7 @@ Make sure you have installed the following tools:
     JWT_ACCESS_TOKEN_SECRET = JWT secret
    ```
 
-## 🏃 Run the server
+## 🏃 Run the server and the test
 
 Run the server in the development mode:
 
@@ -73,6 +73,15 @@ Or in the production mode
 npm start
 ```
 
+Run the test:
+- Test all function
+   ```bash
+   npm run test
+   ```
+- Test by selecting the file
+   ```bash
+   npm run test path-to-your-test-file/file.test.ts
+   ```
 ---
 
 ## 🛠 Additional
@@ -122,7 +131,10 @@ Let's have a look at this structure:
 │   ├── /types           # typescript support
 │   ├── /utils           # Utils
 │   └── server.js        # Entry point of the app
-├── .env.local           # Development environment variables
+├── /tests               # Unit test main folder
+│   ├── /middleware      # Middleware tests
+│   ├── /modules         # Modules tests
+├── .env.development     # Development environment variables
 ├── package.json         # Dependencies and scripts
 └── README.md            # Project documentation
 ```
