@@ -90,3 +90,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+database/prospects_db.sqlite
+localstack-data/
+sqlite-data/prospects_db.sqlite
