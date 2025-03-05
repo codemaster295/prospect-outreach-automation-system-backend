@@ -45,8 +45,8 @@ export default function (sequelize: Sequelize): typeof UserModel {
                 allowNull: false,
                 type: DataTypes.STRING(255),
             },
-            created_at: DataTypes.DATE,
-            updated_at: DataTypes.DATE,
+            created_at:DataTypes.DATE,
+            updated_at:DataTypes.DATE,
         },
         {
             tableName: 'users',

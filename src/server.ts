@@ -6,7 +6,7 @@ import { DB } from '@database/index';
 import { PORT } from './config';
 import { errorHandler } from './utils/error-handler';
 import { swaggerSpec, swaggerUi } from './utils/swagger';
-
+import contactRouter from './modules/contacts/contact.routes';
 const appServer = express();
 const port = PORT;
 
@@ -14,7 +14,7 @@ const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200,
 };
-
+// appServer.use('/api/contacts', contactRouter);
 appServer.use((req, res, next) => {
     const startTime = Date.now();
 

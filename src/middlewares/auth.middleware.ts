@@ -29,6 +29,7 @@ export const authMiddleware = async (
         const authHeader =
             req.header('Authorization') || req.header('authorization');
         req.context = await decodeToken(authHeader);
+        
         next();
     } catch (error) {
         next(error);
