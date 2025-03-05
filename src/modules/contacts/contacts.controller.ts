@@ -2,16 +2,6 @@ import { Request, Response } from 'express';
 import ContactService, { getContactService } from './contacts.service';
 import axios from 'axios';
 import { getFile } from '../files/files.service';
-// export const getAllContactsController = async (req: Request, res: Response): Promise<void> => {
-//     try {
-//         const contacts = await ContactService.getAllContacts(req.body);
-//         res.status(200).json({ message: "Data retrieved successfully", contacts });
-//         console.log(contacts, "data get")
-//     } catch (error: any) {
-//         console.error('Error in getAllContactsController:', error);
-//         res.status(500).json({ error: 'Failed to retrieve contacts', details: error.message });
-//     }
-// };
 
 export const getAllContactsController = async (
     req: Request,
@@ -31,7 +21,6 @@ export const getAllContactsController = async (
             message: 'Data retrieved successfully',
             contacts,
         });
-        console.log(contacts, 'data get');
     } catch (error: any) {
         console.error('Error in getAllContactsController:', error);
         res.status(500).json({
@@ -72,13 +61,10 @@ export const createContactController = async (
         const contacts = csvData
             ?.split('\n')
             .map((line: string) => line.split(','));
-        console.log(contacts, 'contacts');
 
         // take first row as header and rest as data
         const header = contacts[0];
         const data = contacts.slice(1);
-        console.log(header, 'header');
-        console.log(data, 'data');
 
         //map the header to the data with mappings
         const mappedData = data.map((row: string[]) => {
