@@ -21,7 +21,7 @@ const allowedExtensions = [".png", ".jpg", ".jpeg", ".pdf"];
 
 // File filter to allow only specific file types
 const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback): void => {
-    const ext = mime.lookup(file.originalname).toLowerCase();
+    const ext = mime.lookup(file.originalname)
     if(ext){
         cb(null, true);
     }else {

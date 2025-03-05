@@ -94,3 +94,4 @@ database/prospects_db.sqlite
 localstack-data/
 sqlite-data/prospects_db.sqlite
 volume/
+data/prospects_db.sqlite

@@ -49,16 +49,16 @@ export const getFileByIdController = async (req: Request, res: Response) => {
 
 export const createFileController = async (req: Request, res: Response) => {
     try {
-        if (!req.file) return res.status(400).json({ message: "File is required" });
+        if (!req.file) { res.status(400).json({ message: "File is required" }) };
 
         const fileUrl = (req.file as any)?.location || "";
         const uploadedBy = (req.context as any).userId;
         // console.log(fileUrl, uploadedBy,"fileUrl, uploadedBy")
         const file = await contactFilesService.createContact(fileUrl, uploadedBy);
-        return res.status(201).json(file);
+        res.status(201).json(file);
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ message: "Error uploading file", error });
+        res.status(500).json({ message: "Error uploading file", error });
     }
 };
 
