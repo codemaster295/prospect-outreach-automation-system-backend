@@ -1,4 +1,4 @@
-export interface ContactFiles {
+export interface Files {
     id?: string;
     fileUrl: string;
     uploadedBy: string;

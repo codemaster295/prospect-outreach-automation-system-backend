@@ -1,12 +1,12 @@
-import { ContactFiles } from '@/interfaces/contactFiles.interfaces';
+import { Files } from '@/interfaces/files.interfaces';
 
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
-export type ContactFileCreationAttributes = Optional<ContactFiles, 'id'>;
+export type FileCreationAttributes = Optional<Files, 'id'>;
 
-export class ContactFileModel
-    extends Model<ContactFiles, ContactFileCreationAttributes>
-    implements ContactFiles
+export class FileModel
+    extends Model<Files, FileCreationAttributes>
+    implements Files
 {
     id?: string | undefined;
     fileUrl!: string;
@@ -16,8 +16,8 @@ export class ContactFileModel
     deletedAt: string | undefined;
 }
 
-export default function (sequelize: Sequelize): typeof ContactFileModel {
-    ContactFileModel.init(
+export default function (sequelize: Sequelize): typeof FileModel {
+    FileModel.init(
         {
             id: {
                 allowNull: false,
@@ -39,7 +39,7 @@ export default function (sequelize: Sequelize): typeof ContactFileModel {
             deletedAt: DataTypes.DATE,
         },
         {
-            tableName: 'ContactFiles',
+            tableName: 'Files',
             sequelize,
             createdAt: 'createdAt',
             updatedAt: 'updatedAt',
@@ -47,5 +47,5 @@ export default function (sequelize: Sequelize): typeof ContactFileModel {
             timestamps: true,
         },
     );
-    return ContactFileModel;
+    return FileModel;
 }

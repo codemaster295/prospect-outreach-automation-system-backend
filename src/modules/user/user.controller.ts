@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { getUserProfileService } from './user.service';
+import { CustomError } from '@/utils/custom-error';
 
 export const getUserProfileController = async (
     req: Request,
@@ -7,14 +8,11 @@ export const getUserProfileController = async (
     next: NextFunction,
 ): Promise<void> => {
     try {
-        const authorization = req.headers.authorization;
-        if (!authorization) {
-            res.status(404).json({ message: 'User not found' });
-            return;
+        const user = req.user?.sub;
+        if (!user) {
+            throw new CustomError('User not found', 401);
         }
-
-        const accessToken = authorization.split(' ')[1];
-        const response = await getUserProfileService(accessToken);
+        const response = await getUserProfileService(user);
 
         res.status(200).json({ message: 'User data fetched', data: response });
     } catch (error) {

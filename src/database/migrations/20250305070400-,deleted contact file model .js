@@ -3,6 +3,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
+        //remove contact file model
+        await queryInterface.dropTable('ContactFiles');
+        /**
+         * Add altering commands here.
+         *
+         * Example:
+         * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
+         */
+    },
+
+    async down(queryInterface, Sequelize) {
+        //create contact file model
         await queryInterface.createTable('ContactFiles', {
             id: {
                 allowNull: false,
@@ -31,8 +43,11 @@ module.exports = {
                 type: Sequelize.DATE,
             },
         });
-    },
-    async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('ContactFiles');
+        /**
+         * Add reverting commands here.
+         *
+         * Example:
+         * await queryInterface.dropTable('users');
+         */
     },
 };
