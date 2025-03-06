@@ -3,7 +3,7 @@ import repo from './contacts.repo';
 import { verifyJWT } from '@/middlewares/jwt.service';
 import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 const Contact = DB.Contacts;
-DB.sequelize.sync({ force: false });
+// DB.sequelize.sync({ force: false });
 // Adjust the path as needed
 
 export const getContactService = async (accessToken: string) => {
