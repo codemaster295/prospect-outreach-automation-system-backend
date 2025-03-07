@@ -5,7 +5,7 @@ export const getUserProfile = async (userId: string, accessToken: string) => {
     console.log(accessToken, userId, 'accessToken');
     const user = axios
         .get(
-            `https://${process.env.AUTH0_DOMAIN}/users/auth0|67bbf750be14b00f09793b51`,
+            `https://${process.env.AUTH0_DOMAIN}/users/${userId}`,
             {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,

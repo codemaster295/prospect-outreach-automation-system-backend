@@ -10,6 +10,7 @@ export class ContactsModel
     public id?: string | undefined;
     public userId!: string;
     public fileId!: string;
+    public firstName!: string;
     public lastName!: string;
     public title!: string;
     public companyName!: string;
@@ -45,6 +46,10 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
             fileId: {
                 type: DataTypes.UUID,
                 allowNull: false,
+            },
+            firstName: {
+                type: DataTypes.STRING,
+                allowNull: true,
             },
             lastName: {
                 type: DataTypes.STRING,

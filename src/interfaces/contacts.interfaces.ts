@@ -2,6 +2,7 @@ export interface Contacts {
     id?: string;
     userId: string;
     fileId: string;
+    firstName:string;
     lastName: string;
     title: string;
     companyName: string;

@@ -1,6 +1,5 @@
 import logger from '@/utils/logger';
 import Sequelize from 'sequelize';
-import userModel from './models/user.model';
 import FileModel from './models/files.model';
 import ContactsModel from './models/contacts.model';
 import { DB_DIALECT, DB_STORAGE, NODE_ENV } from '@/config';
@@ -30,7 +29,6 @@ sequelize.authenticate();
 console.log(sequelize.getDialect());
 // export { sequelize, Contacts };
 export const DB = {
-    Users: userModel(sequelize),
     Contacts: ContactsModel(sequelize),
     ContactFiles: ContactFileModel(sequelize),
     Files: FileModel(sequelize),
