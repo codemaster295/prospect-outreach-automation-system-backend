@@ -7,5 +7,5 @@ const router = express.Router();
 
 router.use('/user', requiresAuth, userRouter);
 router.use('/contacts', requiresAuth, contactRouter);
-router.use('/files', requiresAuth, filesRouter);
+router.use('/files', filesRouter);
 export default router;

@@ -1,19 +1,4 @@
-version: "3.8"
-
 services:
-  app:
-    build: .
-    container_name: express-app
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - localstack
-    volumes:
-      - ./data:/usr/src/app/data
-    command: ["npm", "run", "start"]
-
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-prospects}"
     image: localstack/localstack
@@ -21,13 +6,13 @@ services:
       - "127.0.0.1:4566:4566" # LocalStack Gateway
       - "127.0.0.1:4510-4559:4510-4559" # external services port range
     environment:
-      - SERVICES=sqs,s3,dynamodb,lambda,logs,secretsmanager
+      - SERVICES=s3
       - DEBUG=${DEBUG:-0}
       - AWS_ACCESS_KEY_ID=access_key_id
       - AWS_DEFAULT_REGION=us-east-1
       - AWS_SECRET_ACCESS_KEY=secret
-      - LAMBDA_EXECUTOR_TIMEOUT=30
     volumes:
       - "/root/.aws"
+      - "./localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"

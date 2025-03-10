@@ -17,11 +17,3 @@ RUN mkdir -p /usr/src/app/data && touch /usr/src/app/data/database.sqlite
 # Install SQLite
 RUN apt-get update && apt-get install -y sqlite3
 
-# Build the TypeScript application
-RUN npm run build
-
-# Expose the application port
-EXPOSE 3000
-
-# Start the application
-CMD ["npm", "run", "start"]

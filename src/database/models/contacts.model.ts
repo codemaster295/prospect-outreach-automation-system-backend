@@ -66,7 +66,6 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
             email: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
             },
             firstPhone: {
                 type: DataTypes.STRING,
