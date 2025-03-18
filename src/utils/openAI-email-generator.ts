@@ -15,10 +15,10 @@ class EmailContentGenerator {
     private deploymentId: string;
 
     constructor() {
-        this.endpoint = 'https://b2brocket-salesgpt.openai.azure.com';
-        this.apiKey = 'b94628777b6d4e8c9d8539fa0d68756e';
-        this.apiVersion = '2024-10-21';
-        this.deploymentId = 'gpt-35-salesgpt';
+        this.endpoint = process.env.AZURE_ENDPOINT as string;
+        this.apiKey = process.env.AZURE_API_KEY as string;;
+        this.apiVersion = process.env.AZURE_API_VERSION as string;
+        this.deploymentId = process.env.AZURE_DEPLOYMENT_ID as string;
     }
 
     /**
