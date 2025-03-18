@@ -1,5 +1,8 @@
 import express from 'express';
-import { getAllVariableController, createVariableController } from './variables.controller';
+import {
+    getAllVariableController,
+    createVariableController,
+} from './variables.controller';
 
 const variableRouter = express.Router();
 

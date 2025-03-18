@@ -1,28 +1,30 @@
-import EmailContentGenerator from "./utils/openAI-email-generator"; // Adjust path if needed
+import EmailContentGenerator from './utils/openAI-email-generator'; // Adjust path if needed
 
 async function testEmailGenerator() {
-  const prompt = "Write a follow-up email to a client about our new product launch.";
-  let backendBody = "dsds"
-  try {
-    console.log("Testing email generation...");
+    const prompt =
+        'Write a follow-up email to a client about our new product launch.';
+    const backendBody = 'dsds';
+    try {
+        console.log('Testing email generation...');
 
-    const emailContent = await EmailContentGenerator.generateEmailContent(prompt, {
-      tone: "friendly",
-      length: "short",
-    });
+        const emailContent = await EmailContentGenerator.generateEmailContent(
+            prompt,
+            {
+                tone: 'friendly',
+                length: 'short',
+            },
+        );
 
-    console.log("\n Generated Email Content:\n", emailContent);
-  } catch (error) {
-    console.error("\n Error:", error);
-  }
+        console.log('\n Generated Email Content:\n', emailContent);
+    } catch (error) {
+        console.error('\n Error:', error);
+    }
 }
 
 testEmailGenerator();
 
-
-
 // azur service
-// import EmailContentGenerator from "./utils/openAI-email-generator"; 
+// import EmailContentGenerator from "./utils/openAI-email-generator";
 
 // async function testEmailGenerator()  {
 //   const emailGen = new EmailContentGenerator();

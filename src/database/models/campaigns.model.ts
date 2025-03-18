@@ -1,28 +1,33 @@
-import { Campaigns } from "@/interfaces/campaigns";
+import { Campaigns } from '@/interfaces/campaigns';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 export type CampaignsCreationAttributes = Optional<Campaigns, 'id'>;
-
 
 export class CampaignsModel
     extends Model<Campaigns, CampaignsCreationAttributes>
     implements Campaigns
 {
     id?: string | undefined;
-    name!:string;
+    name!: string;
     audience!: string;
     template!: string;
     delay!: {
         interval: number;
         unit: string;
-      };
-      owner!:string;
+    };
+    owner!: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
     static associate(models: any) {
-        CampaignsModel.belongsTo(models.FileModel, { foreignKey: 'audience', as: 'file' });
-        CampaignsModel.belongsTo(models.TemplateModel, { foreignKey: 'template', as: 'templateData' });
-      }
+        CampaignsModel.belongsTo(models.FileModel, {
+            foreignKey: 'audience',
+            as: 'file',
+        });
+        CampaignsModel.belongsTo(models.TemplateModel, {
+            foreignKey: 'template',
+            as: 'templateData',
+        });
+    }
 }
 
 export default function (sequelize: Sequelize): typeof CampaignsModel {
@@ -33,39 +38,39 @@ export default function (sequelize: Sequelize): typeof CampaignsModel {
                 primaryKey: true,
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-              },
-              name: {
+            },
+            name: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              audience: {
+            },
+            audience: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
-                  model: 'files', 
-                  key: 'id',
+                    model: 'files',
+                    key: 'id',
                 },
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE',
-              },
-              template: {
+            },
+            template: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
-                  model: 'templates', 
-                  key: 'id',
+                    model: 'templates',
+                    key: 'id',
                 },
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE',
-              },
-              delay: {
-                type: DataTypes.JSON, 
+            },
+            delay: {
+                type: DataTypes.JSON,
                 allowNull: true,
-              },
-              owner: {
-                type: DataTypes.STRING, 
+            },
+            owner: {
+                type: DataTypes.STRING,
                 allowNull: true,
-              },
+            },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,

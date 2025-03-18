@@ -30,15 +30,14 @@ export const createCampaignService = async (
     audience: string,
     name: string,
     template: string,
-    owner:string,
-    delay: { interval: number; unit: string } // ✅ Correct Type
+    owner: string,
+    delay: { interval: number; unit: string }, // ✅ Correct Type
 ) => {
-    return await Campaign.create({ audience, name, template, delay ,owner});
+    return await Campaign.create({ audience, name, template, delay, owner });
 };
 
 export default {
     getAllCampaignService,
     getCampaignByIdService,
     createCampaignService,
- 
-  };
+};

@@ -21,36 +21,45 @@ const Template = DB.Templates;
 // };
 export const getAllTemplatesService = async () => {
     return await Template.findAll();
-  };
-  
+};
+
 export const getTemplateByIdService = async (id: string) => {
     return await Template.findByPk(id);
-  };
-  
-export const createTemplateService = async (subject: string, body: string, owner: string) => {
+};
+
+export const createTemplateService = async (
+    subject: string,
+    body: string,
+    owner: string,
+) => {
     return await Template.create({ subject, body, owner });
 };
 
-  export const updateTemplateService = async (id: string, subject: string, body: string, owner: string) => {
+export const updateTemplateService = async (
+    id: string,
+    subject: string,
+    body: string,
+    owner: string,
+) => {
     const template = await Template.findByPk(id);
     if (!template) return null;
-  
+
     await template.update({ subject, body, owner });
     return template;
-  };
+};
 
-  export const deleteTemplateService = async (id: string) => {
+export const deleteTemplateService = async (id: string) => {
     const template = await Template.findByPk(id);
     if (!template) return null;
-  
+
     await template.destroy(); // Soft delete due to `paranoid: true`
     return template;
-  };
+};
 
-  export default {
+export default {
     createTemplateService,
     getAllTemplatesService,
     getTemplateByIdService,
     updateTemplateService,
     deleteTemplateService,
-  };
+};

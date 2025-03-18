@@ -1,5 +1,9 @@
 import express from 'express';
-import { getAllCampaignsController, getCampaignByIdController, createCampaignController } from './campaigns.controller';
+import {
+    getAllCampaignsController,
+    getCampaignByIdController,
+    createCampaignController,
+} from './campaigns.controller';
 
 const campaignRouter = express.Router();
 

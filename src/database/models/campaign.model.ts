@@ -2,19 +2,18 @@ import { Campaign } from '@/interfaces/campaign';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 export type CampaignCreationAttributes = Optional<Campaign, 'id'>;
 
-
 export class CampaignModel
     extends Model<Campaign, CampaignCreationAttributes>
     implements Campaign
 {
     id?: string | undefined;
-    name!:string;
+    name!: string;
     audience!: string;
     template!: string;
     delay!: {
         interval: number;
         unit: string;
-      };
+    };
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
@@ -28,23 +27,23 @@ export default function (sequelize: Sequelize): typeof CampaignModel {
                 primaryKey: true,
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-              },
-              name: {
+            },
+            name: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              audience: {
+            },
+            audience: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              template: {
+            },
+            template: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              delay: {
-                type: DataTypes.JSON, 
+            },
+            delay: {
+                type: DataTypes.JSON,
                 allowNull: false,
-              },
+            },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,

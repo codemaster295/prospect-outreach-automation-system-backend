@@ -4,8 +4,7 @@ import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 
 const Variable = DB.Variables;
 
-
-export const getVariableService =  async (accessToken: string) => {
+export const getVariableService = async (accessToken: string) => {
     const decodeToken = await verifyJWT(
         accessToken,
         JWT_ACCESS_TOKEN_SECRET as string,
@@ -36,7 +35,6 @@ export const getVariableService =  async (accessToken: string) => {
 //         return await Variable.findByPk(id);
 //       };
 
-    
 //       async createVariable(name: string, value: string) {
 //         return await Variable.create({ name, value });
 //       };
@@ -53,17 +51,14 @@ export const createVariableService = async (name: string, value: string) => {
 //     return await Variable.create({ name, value });
 // };
 
-
-export const getAllVariables= async() =>{
+export const getAllVariables = async () => {
     return await Variable.findAll();
-  }
-
-
+};
 
 export default {
     getVariableService,
     createVariableService,
-    getAllVariables
+    getAllVariables,
 };
 
 // export default new VariableService;

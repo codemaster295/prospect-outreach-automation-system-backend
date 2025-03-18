@@ -1,7 +1,6 @@
-import { Template } from "@/interfaces/template";
+import { Template } from '@/interfaces/template';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 export type TemplateCreationAttributes = Optional<Template, 'id'>;
-
 
 export class TemplateModel
     extends Model<Template, TemplateCreationAttributes>
@@ -24,19 +23,19 @@ export default function (sequelize: Sequelize): typeof TemplateModel {
                 primaryKey: true,
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-              },
-              subject: {
+            },
+            subject: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              body: {
+            },
+            body: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              owner: {
+            },
+            owner: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
+            },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,

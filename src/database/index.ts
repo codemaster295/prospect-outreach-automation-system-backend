@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import FileModel from './models/files.model';
 import ContactsModel from './models/contacts.model';
 import TemplateModel from './models/template.model';
-import VariablesModel  from './models/variables.model';
+import VariablesModel from './models/variables.model';
 import ContactFileModel from './models/contactFiles.model';
 import campaignsModel from './models/campaigns.model';
 
@@ -38,9 +38,9 @@ export const DB = {
     Contacts: ContactsModel(sequelize),
     ContactFiles: ContactFileModel(sequelize),
     Files: FileModel(sequelize),
-    Templates:TemplateModel(sequelize),
-    Variables:VariablesModel(sequelize),
-    Campaigns:campaignsModel(sequelize),
+    Templates: TemplateModel(sequelize),
+    Variables: VariablesModel(sequelize),
+    Campaigns: campaignsModel(sequelize),
     sequelize, // connection instance (RAW queries)
     Sequelize, // library
 };
