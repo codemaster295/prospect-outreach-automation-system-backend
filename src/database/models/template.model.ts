@@ -1,45 +1,49 @@
-import { Files } from '@/interfaces/files.interfaces';
-
+import { Template } from "@/interfaces/template";
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+export type TemplateCreationAttributes = Optional<Template, 'id'>;
 
-export type FileCreationAttributes = Optional<Files, 'id'>;
 
-export class FileModel
-    extends Model<Files, FileCreationAttributes>
-    implements Files
+export class TemplateModel
+    extends Model<Template, TemplateCreationAttributes>
+    implements Template
 {
     id?: string | undefined;
-    fileUrl!: string;
-    uploadedBy!: string;
+    subject!: string;
+    body!: string;
+    owner!: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
 }
 
-export default function (sequelize: Sequelize): typeof FileModel {
-    FileModel.init(
+export default function (sequelize: Sequelize): typeof TemplateModel {
+    TemplateModel.init(
         {
             id: {
                 allowNull: false,
                 primaryKey: true,
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-            },
-            fileUrl: {
+              },
+              subject: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
-            uploadedBy: {
+              },
+              body: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
+              },
+              owner: {
+                type: DataTypes.STRING,
+                allowNull: false,
+              },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
             deletedAt: DataTypes.DATE,
         },
         {
-            tableName: 'files',
+            tableName: 'templates',
             sequelize,
             createdAt: 'createdAt',
             updatedAt: 'updatedAt',
@@ -47,5 +51,5 @@ export default function (sequelize: Sequelize): typeof FileModel {
             timestamps: true,
         },
     );
-    return FileModel;
+    return TemplateModel;
 }

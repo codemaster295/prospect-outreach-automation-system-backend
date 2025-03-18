@@ -1,45 +1,45 @@
-import { Files } from '@/interfaces/files.interfaces';
-
+import { Variables } from '@/interfaces/variables';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+export type VariablesCreationAttributes = Optional<Variables, 'id'>;
 
-export type FileCreationAttributes = Optional<Files, 'id'>;
 
-export class FileModel
-    extends Model<Files, FileCreationAttributes>
-    implements Files
+export class VariablesModel
+    extends Model<Variables, VariablesCreationAttributes>
+    implements Variables
 {
     id?: string | undefined;
-    fileUrl!: string;
-    uploadedBy!: string;
+    name!: string;
+    value!: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
 }
 
-export default function (sequelize: Sequelize): typeof FileModel {
-    FileModel.init(
+export default function (sequelize: Sequelize): typeof VariablesModel {
+    VariablesModel.init(
         {
             id: {
                 allowNull: false,
                 primaryKey: true,
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-            },
-            fileUrl: {
+              },
+              name: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
-            uploadedBy: {
+                unique: true,
+              },
+              value: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
-
+                unique: true,
+              },
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
             deletedAt: DataTypes.DATE,
         },
         {
-            tableName: 'files',
+            tableName: 'variables',
             sequelize,
             createdAt: 'createdAt',
             updatedAt: 'updatedAt',
@@ -47,5 +47,5 @@ export default function (sequelize: Sequelize): typeof FileModel {
             timestamps: true,
         },
     );
-    return FileModel;
+    return VariablesModel;
 }

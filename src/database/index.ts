@@ -2,8 +2,14 @@ import logger from '@/utils/logger';
 import Sequelize from 'sequelize';
 import FileModel from './models/files.model';
 import ContactsModel from './models/contacts.model';
-import { DB_DIALECT, DB_STORAGE, NODE_ENV } from '@/config';
+import TemplateModel from './models/template.model';
+import VariablesModel  from './models/variables.model';
 import ContactFileModel from './models/contactFiles.model';
+import campaignsModel from './models/campaigns.model';
+
+import { DB_DIALECT, DB_STORAGE, NODE_ENV } from '@/config';
+import { CampaignsModel } from './models/campaigns.model';
+
 const sequelize = new Sequelize.Sequelize({
     dialect: (DB_DIALECT as Sequelize.Dialect) || 'sqlite',
     storage: DB_STORAGE || './data/prospects_db.sqlite',
@@ -32,6 +38,9 @@ export const DB = {
     Contacts: ContactsModel(sequelize),
     ContactFiles: ContactFileModel(sequelize),
     Files: FileModel(sequelize),
+    Templates:TemplateModel(sequelize),
+    Variables:VariablesModel(sequelize),
+    Campaigns:campaignsModel(sequelize),
     sequelize, // connection instance (RAW queries)
     Sequelize, // library
 };

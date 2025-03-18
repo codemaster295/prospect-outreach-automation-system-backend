@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Contacts', {
+    await queryInterface.createTable('contacts', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -37,7 +37,7 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        unique: false,
       },
       firstPhone: {
         type: Sequelize.STRING,
@@ -92,12 +92,12 @@ module.exports = {
         type: Sequelize.DATE,
       },
     }).then(() => {
-      return queryInterface.addIndex('Contacts', ['email'], { unique: true });
+      return queryInterface.addIndex('contacts', ['email'], { unique: true });
     });
   },
 
   async down (queryInterface, Sequelize) {  
-    await queryInterface.dropTable('Contacts');
+    await queryInterface.dropTable('contacts');
     /**
      * Add reverting commands here.
      *

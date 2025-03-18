@@ -1,45 +1,57 @@
-import { Files } from '@/interfaces/files.interfaces';
-
+import { Campaign } from '@/interfaces/campaign';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+export type CampaignCreationAttributes = Optional<Campaign, 'id'>;
 
-export type FileCreationAttributes = Optional<Files, 'id'>;
 
-export class FileModel
-    extends Model<Files, FileCreationAttributes>
-    implements Files
+export class CampaignModel
+    extends Model<Campaign, CampaignCreationAttributes>
+    implements Campaign
 {
     id?: string | undefined;
-    fileUrl!: string;
-    uploadedBy!: string;
+    name!:string;
+    audience!: string;
+    template!: string;
+    delay!: {
+        interval: number;
+        unit: string;
+      };
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
 }
 
-export default function (sequelize: Sequelize): typeof FileModel {
-    FileModel.init(
+export default function (sequelize: Sequelize): typeof CampaignModel {
+    CampaignModel.init(
         {
             id: {
                 allowNull: false,
                 primaryKey: true,
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-            },
-            fileUrl: {
+              },
+              name: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
-            uploadedBy: {
+              },
+              audience: {
                 type: DataTypes.STRING,
                 allowNull: false,
-            },
+              },
+              template: {
+                type: DataTypes.STRING,
+                allowNull: false,
+              },
+              delay: {
+                type: DataTypes.JSON, 
+                allowNull: false,
+              },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
             deletedAt: DataTypes.DATE,
         },
         {
-            tableName: 'files',
+            tableName: 'Campaign',
             sequelize,
             createdAt: 'createdAt',
             updatedAt: 'updatedAt',
@@ -47,5 +59,5 @@ export default function (sequelize: Sequelize): typeof FileModel {
             timestamps: true,
         },
     );
-    return FileModel;
+    return CampaignModel;
 }
