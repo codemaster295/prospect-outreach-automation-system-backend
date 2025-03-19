@@ -1,12 +1,12 @@
 import express from 'express';
 import {
-    getAllVariableController,
-    createVariableController,
+    getAllVariables,
+    createVariables,
 } from './variables.controller';
 
 const variableRouter = express.Router();
 
-variableRouter.get('/', getAllVariableController);
-variableRouter.post('/', createVariableController);
+variableRouter.get('/', getAllVariables);
+variableRouter.post('/', createVariables);
 
 export default variableRouter;

@@ -1,27 +1,27 @@
 import express from 'express';
 import {
-    getAllCampaignsController,
-    getCampaignByIdController,
-    createCampaignController,
-    updateCampaignController,
-    deleteCampaignController,
+    getAllCampaigns,
+    getCampaignId,
+    createCampaigns,
+    updateCampaign,
+    deleteCampaign,
 } from './campaigns.controller';
 
 const campaignRouter = express.Router();
 
 // Get all campaigns
-campaignRouter.get('/', getAllCampaignsController);
+campaignRouter.get('/', getAllCampaigns);
 
 // Get campaign by ID
-campaignRouter.get('/:id', getCampaignByIdController);
+campaignRouter.get('/:id', getCampaignId);
 
 // Create a new campaign
-campaignRouter.post('/create', createCampaignController);
+campaignRouter.post('/create', createCampaigns);
 
 // Update a campaign
-campaignRouter.put('/:id', updateCampaignController);
+campaignRouter.put('/:id', updateCampaign);
 
 // Delete a campaign
-campaignRouter.delete('/:id', deleteCampaignController);
+campaignRouter.delete('/:id', deleteCampaign);
 
 export default campaignRouter;

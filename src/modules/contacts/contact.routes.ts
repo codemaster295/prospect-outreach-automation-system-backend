@@ -1,13 +1,13 @@
 import express from 'express';
 import {
-    getAllContactsController,
-    createContactController,
+    getAllContacts,
+    createContact,
 } from './contacts.controller';
 
 const contactRouter = express.Router();
 
 // Define API routes
-contactRouter.get('/contact', getAllContactsController);
-contactRouter.post('/create', createContactController);
+contactRouter.get('/contact', getAllContacts);
+contactRouter.post('/create', createContact);
 
 export default contactRouter;

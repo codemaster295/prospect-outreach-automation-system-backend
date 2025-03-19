@@ -4,51 +4,48 @@ import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 
 const Template = DB.Templates;
 
-// export const getAllTemplatesService =  async (accessToken: string) => {
-//     const decodeToken = await verifyJWT(
-//         accessToken,
-//         JWT_ACCESS_TOKEN_SECRET as string,
-//     );
 
-//     const templateid = decodeToken.templateid;
-//     try {
-//         const Templates = await Template.findAll(templateid);
-//         return Templates;
-//     } catch (error) {
-//         console.error('Error fetching Templates:', error);
-//         throw new Error('Database query failed');
-//     }
-// };
-export const getAllTemplatesService = async () => {
+export const getAllTemplate = async () => {
     return await Template.findAll();
 };
 
-export const getTemplateByIdService = async (id: string) => {
+export const getTemplateById = async (id: string) => {
     return await Template.findByPk(id);
 };
+export const getTemplatesByUser = async (userId: string) => {
+    return await Template.findAll({
+        where: { owner: userId },
+    });
+};
 
-export const createTemplateService = async (
+export const createTemplate = async (
     subject: string,
     body: string,
     owner: string,
-) => {
+   ) => {
     return await Template.create({ subject, body, owner });
 };
 
-export const updateTemplateService = async (
+export const updateTemplateById = async (
     id: string,
     subject: string,
     body: string,
-    owner: string,
 ) => {
     const template = await Template.findByPk(id);
     if (!template) return null;
 
-    await template.update({ subject, body, owner });
+    await template.update({ subject, body });
     return template;
 };
+// export const updateTemplateById = async (id:string) => {
+//     return await Template.findByPk(id);
+//     // if (!template) return null;
 
-export const deleteTemplateService = async (id: string) => {
+//     // await template.update({ subject, body, owner });
+//     // return template;
+// };
+
+export const deleteTemplate = async (id: string) => {
     const template = await Template.findByPk(id);
     if (!template) return null;
 
@@ -57,9 +54,9 @@ export const deleteTemplateService = async (id: string) => {
 };
 
 export default {
-    createTemplateService,
-    getAllTemplatesService,
-    getTemplateByIdService,
-    updateTemplateService,
-    deleteTemplateService,
+    createTemplate,
+    getAllTemplate,
+    getTemplateById,
+    updateTemplateById,
+    deleteTemplate,
 };

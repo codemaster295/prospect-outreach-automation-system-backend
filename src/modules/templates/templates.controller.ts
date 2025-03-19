@@ -1,61 +1,67 @@
 import { Request, Response } from 'express';
 import {
-    createTemplateService,
-    deleteTemplateService,
-    getAllTemplatesService,
-    getTemplateByIdService,
-    updateTemplateService,
+    getAllTemplate,
+    getTemplateById,
+    createTemplate,
+    updateTemplateById,
+    deleteTemplate,
+    getTemplatesByUser
 } from './templates.service';
 
-// export const getAllTemplatesController = async (req: Request, res: Response): Promise<void> => {
-//    try {
-//           const authorization = req.headers.authorization;
-
-//           if (!authorization) {
-//               res.status(404).json({ message: 'Templates not found' });
-//               return;
-//           }
-//           const accessToken = authorization.split(' ')[1];
-
-//           const templates = await getAllTemplatesService(accessToken);
-//           res.status(200).json({
-//               message: 'Data retrieved successfully',
-//               templates,
-//           });
-//       } catch (error: any) {
-//           console.error('Error in getAllTemplatesController:', error);
-//           res.status(500).json({
-//               error: 'Failed to retrieve templates',
-//               details: error.message,
-//           });
-//       }
-//   };
-
-export const getAllTemplatesController = async (
+export const getTemplatesUser = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
-        const templates = await getAllTemplatesService();
+        // const templates = await getAllTemplate();
+
+        const userId = req.user?.sub; // `sub` is typically used for user ID in JWT
+
+        if (!userId) {
+             res.status(404).json({ error: 'User not found' });
+             return;
+        }
+
+        const templates = await getTemplatesByUser(userId);
+
         res.status(200).json({
-            message: 'Templates retrieved successfully',
+            message: 'User Templates retrieved successfully',
             templates,
         });
     } catch (error: any) {
-        console.error('Error in getAllTemplatesController:', error);
+        console.error('Error in getTemplatesUser:', error);
         res.status(500).json({
             error: 'Failed to retrieve templates',
             details: error.message,
         });
     }
 };
-export const getTemplateByIdController = async (
+export const getAllTemplates = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const templates = await getAllTemplate();
+
+        res.status(200).json({
+            message: 'Templates retrieved successfully',
+            templates,
+        });
+    } catch (error: any) {
+        console.error('Error in getAllTemplates:', error);
+        res.status(500).json({
+            error: 'Failed to retrieve templates',
+            details: error.message,
+        });
+    }
+};
+export const getTemplateId = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const template = await getTemplateByIdService(id);
+        const template = await getTemplateById(id);
 
         if (!template) {
             res.status(404).json({ message: 'Template not found' });
@@ -67,18 +73,25 @@ export const getTemplateByIdController = async (
             template,
         });
     } catch (error: any) {
-        console.error('Error in getTemplateByIdController:', error);
+        console.error('Error in getTemplateById:', error);
         res.status(500).json({
             error: 'Failed to retrieve template',
             details: error.message,
         });
     }
 };
-export const createTemplateController = async (
+export const createTemplates = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
+        // const userId = req.user?.sub; // `sub` is typically used for user ID in JWT
+
+        // if (!userId) {
+        //      res.status(404).json({ error: 'User not found' });
+        //      return;
+        // }
+
         const { subject, body, owner } = req.body;
 
         if (!subject || !body || !owner) {
@@ -88,13 +101,13 @@ export const createTemplateController = async (
             return;
         }
 
-        const newTemplate = await createTemplateService(subject, body, owner);
+        const newTemplate = await createTemplate(subject, body, owner);
         res.status(201).json({
             message: 'Template created successfully',
             template: newTemplate,
         });
     } catch (error: any) {
-        console.error('Error in createTemplateController:', error);
+        console.error('Error in createTemplate:', error);
         res.status(500).json({
             error: 'Failed to create template',
             details: error.message,
@@ -102,26 +115,26 @@ export const createTemplateController = async (
     }
 };
 
-export const updateTemplateController = async (
+export const updateTemplates = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const { subject, body, owner } = req.body;
+        const { subject, body ,owner} = req.body;
 
-        if (!subject || !body || !owner) {
-            res.status(400).json({
-                message: 'Subject, body, and owner are required',
+        if (owner !== undefined) {
+            res.status(403).json({
+                message: 'Updating owner field is not allowed',
             });
             return;
         }
 
-        const updatedTemplate = await updateTemplateService(
+        const updatedTemplate = await updateTemplateById(
             id,
             subject,
             body,
-            owner,
+       
         );
         if (!updatedTemplate) {
             res.status(404).json({ message: 'Template not found' });
@@ -132,21 +145,21 @@ export const updateTemplateController = async (
             template: updatedTemplate,
         });
     } catch (error: any) {
-        console.error('Error in updateTemplateController:', error);
+        console.error('Error in updateTemplate:', error);
         res.status(500).json({
             error: 'Failed to update template',
             details: error.message,
         });
     }
 };
-export const deleteTemplateController = async (
+export const deleteTemplates = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
         const { id } = req.params;
 
-        const deletedTemplate = await deleteTemplateService(id);
+        const deletedTemplate = await deleteTemplate(id);
         if (!deletedTemplate) {
             res.status(404).json({ message: 'Template not found' });
             return;
@@ -156,7 +169,7 @@ export const deleteTemplateController = async (
             message: 'Template deleted successfully',
         });
     } catch (error: any) {
-        console.error('Error in deleteTemplateController:', error);
+        console.error('Error in deleteTemplate:', error);
         res.status(500).json({
             error: 'Failed to delete template',
             details: error.message,

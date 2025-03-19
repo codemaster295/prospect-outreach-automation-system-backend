@@ -1,60 +1,37 @@
 import { Request, Response } from 'express';
 import {
-    createCampaignService,
-    getAllCampaignService,
-    getCampaignByIdService,
+    createCampaign,
+    getAllCampaign,
+    getCampaignById,
     deleteCampaignById,
     updateCampaignById,
 } from './campaigns.service';
 
-// export const getAllCampaignController = async (req: Request, res: Response): Promise<void> => {
-//    try {
-//           const authorization = req.headers.authorization;
-
-//           if (!authorization) {
-//               res.status(404).json({ message: 'campaigns not found' });
-//               return;
-//           }
-//           const accessToken = authorization.split(' ')[1];
-
-//           const campaigns = await getAllCampaignService(accessToken);
-//           res.status(200).json({
-//               message: 'Data retrieved successfully',
-//               campaigns,
-//           });
-//       } catch (error: any) {
-//           console.error('Error in getAllCampaignController:', error);
-//           res.status(500).json({
-//               error: 'Failed to retrieve campaigns',
-//               details: error.message,
-//           });
-//       }
-//   };
-export const getAllCampaignsController = async (
+export const getAllCampaigns = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
-        const campaigns = await getAllCampaignService();
+        const campaigns = await getAllCampaign();
         res.status(200).json({
             message: 'Campaigns retrieved successfully',
             campaigns,
         });
     } catch (error: any) {
-        console.error('Error in getAllCampaignsController:', error);
+        console.error('Error in getAllCampaigns:', error);
         res.status(500).json({
             error: 'Failed to retrieve campaigns',
             details: error.message,
         });
     }
 };
-export const getCampaignByIdController = async (
+export const getCampaignId = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const campaign = await getCampaignByIdService(Number(id));
+        const campaign = await getCampaignById(Number(id));
 
         if (!campaign) {
             res.status(404).json({ message: 'Campaign not found' });
@@ -66,14 +43,14 @@ export const getCampaignByIdController = async (
             campaign,
         });
     } catch (error: any) {
-        console.error('Error in getCampaignByIdController:', error);
+        console.error('Error in getCampaignId:', error);
         res.status(500).json({
             error: 'Failed to retrieve campaign',
             details: error.message,
         });
     }
 };
-export const createCampaignController = async (
+export const createCampaigns = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
@@ -86,20 +63,20 @@ export const createCampaignController = async (
         }
 
         // Pass individual arguments instead of an object
-        const newCampaign = await createCampaignService(name);
+        const newCampaign = await createCampaign(name);
         res.status(201).json({
             message: 'Campaign created successfully',
             campaign: newCampaign,
         });
     } catch (error: any) {
-        console.error('Error in createCampaignController:', error);
+        console.error('Error in createCampaign:', error);
         res.status(500).json({
             error: 'Failed to create campaign',
             details: error.message,
         });
     }
 };
-export const updateCampaignController = async (
+export const updateCampaign = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
@@ -112,14 +89,14 @@ export const updateCampaignController = async (
             campaign: updatedCampaign,
         });
     } catch (error: any) {
-        console.error('Error in updateCampaignController:', error);
+        console.error('Error in updateCampaign:', error);
         res.status(500).json({
             error: 'Failed to update campaign',
             details: error.message,
         });
     }
 };
-export const deleteCampaignController = async (
+export const deleteCampaign = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
@@ -127,7 +104,7 @@ export const deleteCampaignController = async (
         const { id } = req.params;
         await deleteCampaignById(id);
     } catch (error: any) {
-        console.error('Error in deleteCampaignController:', error);
+        console.error('Error in deleteCampaigns:', error);
         res.status(500).json({
             error: 'Failed to delete campaign',
             details: error.message,

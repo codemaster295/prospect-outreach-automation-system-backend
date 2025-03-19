@@ -1,24 +1,28 @@
 import express from 'express';
 import {
-    createTemplateController,
-    deleteTemplateController,
-    getAllTemplatesController,
-    getTemplateByIdController,
-    updateTemplateController,
+    getAllTemplates,
+    getTemplateId,
+    createTemplates,
+    updateTemplates,
+    deleteTemplates,
+    getTemplatesUser
 } from './templates.controller';
 const templateRouter = express.Router();
-templateRouter.get('/', getAllTemplatesController);
+
+templateRouter.get('/', getAllTemplates);
 
 // Get template by ID
-templateRouter.get('/:id', getTemplateByIdController);
+templateRouter.get('/:id', getTemplateId);
+templateRouter.get('/:userid', getTemplatesUser);
+
 
 // Create a new template
-templateRouter.post('/', createTemplateController);
+templateRouter.post('/', createTemplates);
 
 // Update an existing template
-templateRouter.put('/:id', updateTemplateController);
+templateRouter.put('/:id', updateTemplates);
 
 // Delete a template (soft delete)
-templateRouter.delete('/:id', deleteTemplateController);
+templateRouter.delete('/:id', deleteTemplates);
 
 export default templateRouter;

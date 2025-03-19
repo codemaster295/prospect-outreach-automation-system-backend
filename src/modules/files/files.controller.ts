@@ -9,7 +9,7 @@ import { CustomError } from '@/utils/custom-error';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { verifyJWT } from '@/middlewares/jwt.service';
-export const getAllFilesController = async (req: Request, res: Response) => {
+export const getAllFile = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
         if (!user) {
@@ -26,7 +26,7 @@ export const getAllFilesController = async (req: Request, res: Response) => {
     }
 };
 
-export const generatePresignedUrlController = async (
+export const generatePresignedByUrl = async (
     req: Request,
     res: Response,
 ) => {
@@ -58,7 +58,7 @@ export const generatePresignedUrlController = async (
     }
 };
 
-export const createFileController = async (req: Request, res: Response) => {
+export const createFiles = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
         if (!user) {
@@ -89,7 +89,7 @@ export const createFileController = async (req: Request, res: Response) => {
     }
 };
 
-export const redirectToFileController = async (req: Request, res: Response) => {
+export const redirectToFile = async (req: Request, res: Response) => {
     try {
         const user = req.params.userId;
         const file_uuid = req.params.uuid;

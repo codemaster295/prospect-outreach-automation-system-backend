@@ -6,7 +6,7 @@ const Contact = DB.Contacts;
 // DB.sequelize.sync({ force: false });
 // Adjust the path as needed
 
-export const getContactService = async (accessToken: string) => {
+export const getContact = async (accessToken: string) => {
     const decodeToken = await verifyJWT(
         accessToken,
         JWT_ACCESS_TOKEN_SECRET as string,
@@ -23,10 +23,7 @@ export const getContactService = async (accessToken: string) => {
 };
 
 class ContactService {
-    // Fetch all contacts
-    // async getAllContacts() {
-    //   return await Contact.findAll();
-    // }
+    
     async getAllContacts() {
         try {
             const contacts = await Contact.findAll();
@@ -37,12 +34,10 @@ class ContactService {
         }
     }
 
-    // Fetch a single contact by ID
     async getContactById(id: string) {
         return await Contact.findByPk(id);
     }
 
-    // Create a new contact
     async createContact(data: any) {
         return await Contact.create(data);
     }
@@ -51,14 +46,6 @@ class ContactService {
         return await Contact.bulkCreate(data);
     }
 
-    // // Update an existing contact
-    // async updateContact(id: string, data: any) {
-    //   const [updated] = await Contact.update(data, { where: { id } });
-    //   if (!updated) return null;
-    //   return await Contact.findByPk(id);
-    // }
-
-    // Soft delete a contact
     async deleteContact(id: string) {
         return await Contact.destroy({ where: { id } });
     }

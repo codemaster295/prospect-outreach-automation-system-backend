@@ -4,29 +4,14 @@ import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 
 const Campaign = DB.Campaigns;
 
-// export const getAllCampaignService =  async (accessToken: string) => {
-//     const decodeToken = await verifyJWT(
-//         accessToken,
-//         JWT_ACCESS_TOKEN_SECRET as string,
-//     );
 
-//     const campaignsid = decodeToken.campaignsid;
-//     try {
-//         const Campaigns = await Campaign.findAll(campaignsid);
-//         return Campaigns;
-//     } catch (error) {
-//         console.error('Error fetching Campaigns:', error);
-//         throw new Error('Database query failed');
-//     }
-// };
-
-export const getAllCampaignService = async () => {
+export const getAllCampaign = async () => {
     return await Campaign.findAll();
 };
-export const getCampaignByIdService = async (id: number) => {
+export const getCampaignById = async (id: number) => {
     return await Campaign.findByPk(id);
 };
-export const createCampaignService = async (name: string) => {
+export const createCampaign = async (name: string) => {
     return await Campaign.create({
         name,
     });
@@ -49,9 +34,9 @@ export const deleteCampaignById = async (id: string) => {
     return await Campaign.destroy({ where: { id } });
 };
 export default {
-    getAllCampaignService,
-    getCampaignByIdService,
-    createCampaignService,
+    getAllCampaign,
+    getCampaignById,
+    createCampaign,
     updateCampaignById,
     deleteCampaignById,
 };
