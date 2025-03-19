@@ -16,7 +16,7 @@ class EmailContentGenerator {
 
     constructor() {
         this.endpoint = process.env.AZURE_ENDPOINT as string;
-        this.apiKey = process.env.AZURE_API_KEY as string;;
+        this.apiKey = process.env.AZURE_API_KEY as string;
         this.apiVersion = process.env.AZURE_API_VERSION as string;
         this.deploymentId = process.env.AZURE_DEPLOYMENT_ID as string;
     }
