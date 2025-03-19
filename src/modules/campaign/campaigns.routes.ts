@@ -3,6 +3,8 @@ import {
     getAllCampaignsController,
     getCampaignByIdController,
     createCampaignController,
+    updateCampaignController,
+    deleteCampaignController,
 } from './campaigns.controller';
 
 const campaignRouter = express.Router();
@@ -14,6 +16,12 @@ campaignRouter.get('/', getAllCampaignsController);
 campaignRouter.get('/:id', getCampaignByIdController);
 
 // Create a new campaign
-campaignRouter.post('/', createCampaignController);
+campaignRouter.post('/create', createCampaignController);
+
+// Update a campaign
+campaignRouter.put('/:id', updateCampaignController);
+
+// Delete a campaign
+campaignRouter.delete('/:id', deleteCampaignController);
 
 export default campaignRouter;

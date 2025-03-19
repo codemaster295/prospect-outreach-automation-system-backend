@@ -26,18 +26,32 @@ export const getAllCampaignService = async () => {
 export const getCampaignByIdService = async (id: number) => {
     return await Campaign.findByPk(id);
 };
-export const createCampaignService = async (
-    audience: string,
-    name: string,
-    template: string,
-    owner: string,
-    delay: { interval: number; unit: string }, // ✅ Correct Type
-) => {
-    return await Campaign.create({ audience, name, template, delay, owner });
+export const createCampaignService = async (name: string) => {
+    return await Campaign.create({
+        name,
+    });
 };
 
+export const updateCampaignById = async (
+    id: number,
+    data: {
+        audience?: string;
+        name?: string;
+        template?: string;
+        delay?: { interval: number; unit: string };
+        owner?: string;
+    },
+) => {
+    return await Campaign.update(data, { where: { id } });
+};
+
+export const deleteCampaignById = async (id: string) => {
+    return await Campaign.destroy({ where: { id } });
+};
 export default {
     getAllCampaignService,
     getCampaignByIdService,
     createCampaignService,
+    updateCampaignById,
+    deleteCampaignById,
 };

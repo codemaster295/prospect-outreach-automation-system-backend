@@ -3,6 +3,8 @@ import {
     createCampaignService,
     getAllCampaignService,
     getCampaignByIdService,
+    deleteCampaignById,
+    updateCampaignById,
 } from './campaigns.service';
 
 // export const getAllCampaignController = async (req: Request, res: Response): Promise<void> => {
@@ -76,21 +78,15 @@ export const createCampaignController = async (
     res: Response,
 ): Promise<void> => {
     try {
-        const { audience, name, template, delay, owner } = req.body;
+        const { name } = req.body;
 
-        if (!audience || !name || !template || !delay || !owner) {
-            res.status(400).json({ message: 'All fields are required' });
+        if (!name) {
+            res.status(400).json({ message: 'Name is required' });
             return;
         }
 
         // Pass individual arguments instead of an object
-        const newCampaign = await createCampaignService(
-            audience,
-            name,
-            template,
-            owner,
-            delay,
-        );
+        const newCampaign = await createCampaignService(name);
         res.status(201).json({
             message: 'Campaign created successfully',
             campaign: newCampaign,
@@ -99,6 +95,41 @@ export const createCampaignController = async (
         console.error('Error in createCampaignController:', error);
         res.status(500).json({
             error: 'Failed to create campaign',
+            details: error.message,
+        });
+    }
+};
+export const updateCampaignController = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const updatedCampaign = await updateCampaignById(Number(id), req.body);
+
+        res.status(200).json({
+            message: 'Campaign updated successfully',
+            campaign: updatedCampaign,
+        });
+    } catch (error: any) {
+        console.error('Error in updateCampaignController:', error);
+        res.status(500).json({
+            error: 'Failed to update campaign',
+            details: error.message,
+        });
+    }
+};
+export const deleteCampaignController = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+        await deleteCampaignById(id);
+    } catch (error: any) {
+        console.error('Error in deleteCampaignController:', error);
+        res.status(500).json({
+            error: 'Failed to delete campaign',
             details: error.message,
         });
     }

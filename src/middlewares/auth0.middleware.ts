@@ -9,7 +9,7 @@ const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN || '';
 const API_AUDIENCE = process.env.API_AUDIENCE || '';
 
 const client = jwksClient({
-    jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+    jwksUri: `${AUTH0_DOMAIN}/.well-known/jwks.json`,
 });
 
 function getKey(
@@ -46,7 +46,7 @@ export const requiresAuth = (
         getKey,
         {
             audience: API_AUDIENCE,
-            issuer: `https://${AUTH0_DOMAIN}/`,
+            issuer: `${AUTH0_DOMAIN}/`,
             algorithms: ['RS256'],
         },
         (err, decoded) => {

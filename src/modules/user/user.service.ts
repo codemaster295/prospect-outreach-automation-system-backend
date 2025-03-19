@@ -3,11 +3,11 @@ import { CustomError } from '@/utils/custom-error';
 import { getUserProfile } from './user.repo';
 
 export const getUserProfileService = async (userId: string) => {
-    const managementUrl = `https://${process.env.AUTH0_DOMAIN}/oauth/token`;
+    const managementUrl = `${process.env.AUTH0_DOMAIN}/oauth/token`;
     console.log(managementUrl);
     const clientId = process.env.AUTH0_CLIENT_ID;
     const clientSecret = process.env.AUTH0_CLIENT_SECRET;
-    const audience = process.env.AUTH0_AUDIENCE;
+    const audience = process.env.AUTH0_DOMAIN + '/api/v2/';
     const token = await axios
         .post(managementUrl, {
             client_id: clientId,

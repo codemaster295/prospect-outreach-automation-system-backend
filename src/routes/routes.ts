@@ -13,5 +13,5 @@ router.use('/contacts', requiresAuth, contactRouter);
 router.use('/files', filesRouter);
 router.use('/vairables', variableRouter);
 router.use('/templates', templateRouter);
-router.use('/campaign', campaignRouter);
+router.use('/campaigns', campaignRouter);
 export default router;
