@@ -4,8 +4,6 @@ import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 
 const Variable = DB.Variables;
 
-
-
 export const createVariable = async (name: string, value: string) => {
     if (typeof name !== 'string' || typeof value !== 'string') {
         throw new Error('Name and Value must be strings');

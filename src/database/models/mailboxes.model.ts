@@ -1,4 +1,4 @@
-import { Mailbox } from '@/interfaces/mailboxes.interfaces';
+import { Mailbox, MailboxType } from '@/interfaces/mailboxes.interfaces';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 export type MailboxCreationAttributes = Optional<Mailbox, 'id'>;
 
@@ -6,10 +6,10 @@ export class MailboxModel
     extends Model<Mailbox, MailboxCreationAttributes>
     implements Mailbox
 {
-    id?: string; 
+    id?: string;
     senderEmail!: string;
     owner!: string;
-    provider!: 'google' | 'microsoft' | 'smtp'; // Enum values
+    provider!: MailboxType; // Enum values
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
@@ -32,11 +32,11 @@ export default function (sequelize: Sequelize): typeof MailboxModel {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            provider:{
+            provider: {
                 type: DataTypes.ENUM,
                 values: ['google', 'microsoft', 'smtp'],
                 allowNull: false,
-              },
+            },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,

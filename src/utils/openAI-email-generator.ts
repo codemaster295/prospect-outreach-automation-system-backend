@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import axios from 'axios';
 dotenv.config();
@@ -43,7 +42,10 @@ class EmailContentGenerator {
      * @param company - Information about the company.
      * @returns XML string representing the prompt.
      */
-    private constructPrompt(prospect: Prospect, company: CompanyDetails): string {
+    private constructPrompt(
+        prospect: Prospect,
+        company: CompanyDetails,
+    ): string {
         return `
 <prompt>
     <context>
@@ -127,8 +129,8 @@ class EmailContentGenerator {
                                         "subject": "Email subject here",
                                         "body": "Email body here"
                                     }
-                                    Do not include any extra text, explanations, or markdown formatting. Only return a raw JSON object.`
-                                                        },
+                                    Do not include any extra text, explanations, or markdown formatting. Only return a raw JSON object.`,
+                        },
                     ],
                     temperature: 0.7,
                     max_tokens: 300,

@@ -47,7 +47,12 @@ async function testEmailGenerator() {
             },
         );
 
-        console.log('\n=====Generated Email Content======:\n\n', emailContent.body, '\n\n', emailContent.subject);
+        console.log(
+            '\n=====Generated Email Content======:\n\n',
+            emailContent.body,
+            '\n\n',
+            emailContent.subject,
+        );
     } catch (error) {
         console.error('\nError:', error);
     }

@@ -5,7 +5,7 @@ import {
     createTemplates,
     updateTemplates,
     deleteTemplates,
-    getTemplatesUser
+    getTemplatesUser,
 } from './templates.controller';
 const templateRouter = express.Router();
 
@@ -14,7 +14,6 @@ templateRouter.get('/', getAllTemplates);
 // Get template by ID
 templateRouter.get('/:id', getTemplateId);
 templateRouter.get('/:userid', getTemplatesUser);
-
 
 // Create a new template
 templateRouter.post('/', createTemplates);

@@ -6,6 +6,7 @@ import { requiresAuth } from '@/middlewares/auth0.middleware';
 import variableRouter from '@/modules/variables/variables.routes';
 import templateRouter from '@/modules/templates/templates.routes';
 import campaignRouter from '@/modules/campaign/campaigns.routes';
+import mailboxRouter from '@/modules/mailboxes/mailboxes.routes';
 const router = express.Router();
 
 router.use('/user', requiresAuth, userRouter);
@@ -14,4 +15,5 @@ router.use('/files', filesRouter);
 router.use('/vairables', variableRouter);
 router.use('/templates', templateRouter);
 router.use('/campaigns', campaignRouter);
+router.use('/mailboxes', mailboxRouter);
 export default router;

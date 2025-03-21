@@ -26,10 +26,7 @@ export const getAllFile = async (req: Request, res: Response) => {
     }
 };
 
-export const generatePresignedByUrl = async (
-    req: Request,
-    res: Response,
-) => {
+export const generatePresignedByUrl = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
         if (!user) {

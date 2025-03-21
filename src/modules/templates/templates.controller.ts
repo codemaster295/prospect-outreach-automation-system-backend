@@ -5,7 +5,7 @@ import {
     createTemplate,
     updateTemplateById,
     deleteTemplate,
-    getTemplatesByUser
+    getTemplatesByUser,
 } from './templates.service';
 
 export const getTemplatesUser = async (
@@ -18,8 +18,8 @@ export const getTemplatesUser = async (
         const userId = req.user?.sub; // `sub` is typically used for user ID in JWT
 
         if (!userId) {
-             res.status(404).json({ error: 'User not found' });
-             return;
+            res.status(404).json({ error: 'User not found' });
+            return;
         }
 
         const templates = await getTemplatesByUser(userId);
@@ -121,7 +121,7 @@ export const updateTemplates = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const { subject, body ,owner} = req.body;
+        const { subject, body, owner } = req.body;
 
         if (owner !== undefined) {
             res.status(403).json({
@@ -130,12 +130,7 @@ export const updateTemplates = async (
             return;
         }
 
-        const updatedTemplate = await updateTemplateById(
-            id,
-            subject,
-            body,
-       
-        );
+        const updatedTemplate = await updateTemplateById(id, subject, body);
         if (!updatedTemplate) {
             res.status(404).json({ message: 'Template not found' });
             return;

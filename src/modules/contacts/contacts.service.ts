@@ -23,7 +23,6 @@ export const getContact = async (accessToken: string) => {
 };
 
 class ContactService {
-    
     async getAllContacts() {
         try {
             const contacts = await Contact.findAll();

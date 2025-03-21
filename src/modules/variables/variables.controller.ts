@@ -1,11 +1,6 @@
 import { Request, Response } from 'express';
 
-import {
-    createVariable,
-    getAllVariable,
-} from './variables.service';
-
-
+import { createVariable, getAllVariable } from './variables.service';
 
 export const getAllVariables = async (
     req: Request,

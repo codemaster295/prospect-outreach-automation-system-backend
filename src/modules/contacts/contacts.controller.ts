@@ -30,7 +30,7 @@ export const getAllContacts = async (
     }
 };
 
-export const createContact= async (
+export const createContact = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
@@ -122,4 +122,3 @@ export const getContactId = async (
         res.status(500).json({ error: 'Failed to retrieve contact' });
     }
 };
-

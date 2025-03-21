@@ -4,7 +4,6 @@ import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 
 const Campaign = DB.Campaigns;
 
-
 export const getAllCampaign = async () => {
     return await Campaign.findAll();
 };

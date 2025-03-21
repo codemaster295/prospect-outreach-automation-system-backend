@@ -4,7 +4,6 @@ import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 
 const Template = DB.Templates;
 
-
 export const getAllTemplate = async () => {
     return await Template.findAll();
 };
@@ -22,7 +21,7 @@ export const createTemplate = async (
     subject: string,
     body: string,
     owner: string,
-   ) => {
+) => {
     return await Template.create({ subject, body, owner });
 };
 

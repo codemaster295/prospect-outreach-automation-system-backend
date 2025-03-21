@@ -6,10 +6,11 @@ export class MailboxConfigModel
     extends Model<MailboxConfig, MailboxconfigCreationAttributes>
     implements MailboxConfig
 {
-    id?: string; 
+    id?: string;
     mailbox!: string;
     key!: string;
     value!: string;
+    owner!: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
@@ -30,7 +31,7 @@ export default function (sequelize: Sequelize): typeof MailboxConfigModel {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-         
+
             mailbox: {
                 type: DataTypes.UUID,
                 allowNull: false,
@@ -41,7 +42,7 @@ export default function (sequelize: Sequelize): typeof MailboxConfigModel {
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE',
             },
-           
+
             key: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -50,7 +51,10 @@ export default function (sequelize: Sequelize): typeof MailboxConfigModel {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-
+            owner: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
             deletedAt: DataTypes.DATE,

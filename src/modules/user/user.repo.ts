@@ -1,7 +1,10 @@
 import { CustomError } from '@/utils/custom-error';
 import axios from 'axios';
 
-export const getUserProfiledata = async (userId: string, accessToken: string) => {
+export const getUserProfiledata = async (
+    userId: string,
+    accessToken: string,
+) => {
     try {
         const user = await axios.get(
             `${process.env.AUTH0_DOMAIN}/api/v2/users/${userId}`,
