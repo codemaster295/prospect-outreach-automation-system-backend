@@ -1,10 +1,10 @@
 import * as mailboxRepo from '@/modules/mailboxes/mailboxes.repo';
-import * as mailboxConfigRepo from '@/modules/mailbox-config/mailboxes-config.repo';
 import { Request, Response } from 'express';
+import { MailboxType } from '@/interfaces/mailboxes.interfaces';
 
 export const createMailbox = async (req: Request, res: Response) => {
     try {
-        const { senderEmail, provider, config } = req.body;
+        const { senderEmail, provider } = req.body;
         const owner = req.user?.sub;
         if (!owner) {
             throw new Error('Unauthorized');
@@ -14,16 +14,23 @@ export const createMailbox = async (req: Request, res: Response) => {
             provider,
             owner,
         );
-        if (!mailbox.id) {
-            throw new Error('Mailbox not created');
-        }
-        await mailboxConfigRepo.createOrUpdateMailboxConfig(
-            config,
-            mailbox.id,
-            owner,
-        );
-        res.status(201).json({ message: 'Mailbox created successfully' });
+        res.status(201).json({
+            message: 'Mailbox created successfully',
+            mailbox,
+        });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
+};
+export const getMailboxes = async (req: Request, res: Response) => {
+    const { email } = req.params;
+    const { provider } = req.query;
+    const owner = req.user?.sub;
+    if (!owner) {
+        throw new Error('Unauthorized');
+    }
+    const mailbox = await mailboxRepo.getMailbox(email, owner, {
+        provider: provider as MailboxType,
+    });
+    res.status(200).json({ mailbox });
 };

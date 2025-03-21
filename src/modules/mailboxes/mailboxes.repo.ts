@@ -10,3 +10,14 @@ export const createMailbox = async (
     const mailbox = await Mailbox.create({ senderEmail, provider, owner });
     return mailbox;
 };
+
+export const getMailbox = async (
+    email: string,
+    owner: string,
+    additionalWhere: any = {},
+) => {
+    const mailbox = await Mailbox.findOne({
+        where: { senderEmail: email, owner, ...additionalWhere },
+    });
+    return mailbox;
+};
