@@ -9,6 +9,7 @@ import { CustomError } from '@/utils/custom-error';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { verifyJWT } from '@/middlewares/jwt.service';
+import { updateCampaignById } from '@/modules/campaign/campaigns.service';
 export const getAllFile = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
@@ -58,6 +59,7 @@ export const generatePresignedByUrl = async (req: Request, res: Response) => {
 export const createFiles = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
+        const campaignId = req.params.campaignId;
         if (!user) {
             throw new CustomError('User not found', 401);
         }
@@ -79,6 +81,11 @@ export const createFiles = async (req: Request, res: Response) => {
             updatedAt: new Date().toISOString(),
             deletedAt: undefined,
         });
+
+        await updateCampaignById(campaignId, {
+            audience: fileData.id,
+        });
+
         res.status(200).json(fileData);
     } catch (error) {
         console.log(error, 'error');

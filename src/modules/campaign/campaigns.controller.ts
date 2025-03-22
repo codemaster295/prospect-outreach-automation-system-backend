@@ -2,20 +2,53 @@ import { Request, Response } from 'express';
 import {
     createCampaign,
     getAllCampaign,
-    getCampaignById,
     deleteCampaignById,
     updateCampaignById,
+    getCampaign,
 } from './campaigns.service';
+import { DB } from '@database/index';
+import { getUserProfile } from '../user/user.service';
 
 export const getAllCampaigns = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
-        const campaigns = await getAllCampaign();
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const campaigns = await getAllCampaign({
+            where: {
+                owner,
+            },
+            include: [
+                {
+                    association: 'sending_account',
+                    attributes: ['id', 'senderEmail'],
+                },
+            ],
+            attributes: [
+                'id',
+                'name',
+                'createdAt',
+                'updatedAt',
+                'status',
+                'mailbox',
+            ],
+        });
+        const user = await getUserProfile(owner);
+        const campaignsData = [];
+        for (const campaign of campaigns) {
+            campaignsData.push({
+                ...campaign.dataValues,
+                created_by: user.nickname,
+            });
+        }
         res.status(200).json({
             message: 'Campaigns retrieved successfully',
-            campaigns,
+            campaigns: campaignsData,
         });
     } catch (error: any) {
         console.error('Error in getAllCampaigns:', error);
@@ -31,7 +64,27 @@ export const getCampaignId = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const campaign = await getCampaignById(Number(id));
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const campaign = await getCampaign({
+            where: {
+                id,
+                owner,
+            },
+            attributes: [
+                'id',
+                'name',
+                'audience',
+                'template',
+                'mailbox',
+                'status',
+                'createdAt',
+                'updatedAt',
+            ],
+        });
 
         if (!campaign) {
             res.status(404).json({ message: 'Campaign not found' });
@@ -61,9 +114,18 @@ export const createCampaigns = async (
             res.status(400).json({ message: 'Name is required' });
             return;
         }
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
 
         // Pass individual arguments instead of an object
-        const newCampaign = await createCampaign(name);
+        const newCampaign = await createCampaign({
+            name,
+            owner,
+        });
+        console.log(newCampaign, 'newCampaign');
         res.status(201).json({
             message: 'Campaign created successfully',
             campaign: newCampaign,
@@ -82,7 +144,7 @@ export const updateCampaign = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const updatedCampaign = await updateCampaignById(Number(id), req.body);
+        const updatedCampaign = await updateCampaignById(id, req.body);
 
         res.status(200).json({
             message: 'Campaign updated successfully',

@@ -12,7 +12,7 @@ const s3 = new S3Client({
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test',
     },
     region: process.env.AWS_REGION || 'us-east-1',
-    endpoint: process.env.AWS_S3_ENDPOINT || 'http://localhost:4577', // LocalStack S3 endpoint
+    endpoint: process.env.AWS_S3_ENDPOINT || 'http://localhost:4566', // LocalStack S3 endpoint
     forcePathStyle: true, // Required for LocalStack
 });
 

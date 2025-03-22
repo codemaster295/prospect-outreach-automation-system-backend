@@ -50,5 +50,6 @@ export default function (sequelize: Sequelize): typeof TemplateModel {
             timestamps: true,
         },
     );
+
     return TemplateModel;
 }

@@ -7,6 +7,8 @@ export interface Campaigns {
         interval: number;
         unit: string;
     };
+    mailbox?: string;
+    status?: string;
     owner?: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;

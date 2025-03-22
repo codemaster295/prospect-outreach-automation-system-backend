@@ -6,22 +6,23 @@ import {
     updateCampaign,
     deleteCampaign,
 } from './campaigns.controller';
+import { requiresAuth } from '@/middlewares/auth0.middleware';
 
 const campaignRouter = express.Router();
 
 // Get all campaigns
-campaignRouter.get('/', getAllCampaigns);
+campaignRouter.get('/', requiresAuth, getAllCampaigns);
 
 // Get campaign by ID
-campaignRouter.get('/:id', getCampaignId);
+campaignRouter.get('/:id', requiresAuth, getCampaignId);
 
 // Create a new campaign
-campaignRouter.post('/create', createCampaigns);
+campaignRouter.post('/create', requiresAuth, createCampaigns);
 
 // Update a campaign
-campaignRouter.put('/:id', updateCampaign);
+campaignRouter.put('/:id', requiresAuth, updateCampaign);
 
 // Delete a campaign
-campaignRouter.delete('/:id', deleteCampaign);
+campaignRouter.delete('/:id', requiresAuth, deleteCampaign);
 
 export default campaignRouter;

@@ -7,21 +7,22 @@ import {
     deleteTemplates,
     getTemplatesUser,
 } from './templates.controller';
+import { requiresAuth } from '@/middlewares/auth0.middleware';
 const templateRouter = express.Router();
 
-templateRouter.get('/', getAllTemplates);
+templateRouter.get('/', requiresAuth, getAllTemplates);
 
 // Get template by ID
-templateRouter.get('/:id', getTemplateId);
-templateRouter.get('/:userid', getTemplatesUser);
+templateRouter.get('/:id', requiresAuth, getTemplateId);
+templateRouter.get('/:userid', requiresAuth, getTemplatesUser);
 
 // Create a new template
-templateRouter.post('/', createTemplates);
+templateRouter.post('/', requiresAuth, createTemplates);
 
 // Update an existing template
-templateRouter.put('/:id', updateTemplates);
+templateRouter.put('/:id', requiresAuth, updateTemplates);
 
 // Delete a template (soft delete)
-templateRouter.delete('/:id', deleteTemplates);
+templateRouter.delete('/:id', requiresAuth, deleteTemplates);
 
 export default templateRouter;

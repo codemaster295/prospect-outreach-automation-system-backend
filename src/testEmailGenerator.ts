@@ -58,7 +58,7 @@ async function testEmailGenerator() {
     }
 }
 
-testEmailGenerator();
+// testEmailGenerator();
 
 // azur service
 // import EmailContentGenerator from "./utils/openAI-email-generator";

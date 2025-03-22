@@ -31,18 +31,23 @@ const sequelize = new Sequelize.Sequelize({
 });
 
 sequelize.authenticate();
+
 // const Contacts = ContactsModel(sequelize);
 console.log(sequelize.getDialect());
-// export { sequelize, Contacts };
-export const DB = {
+// export { sequelize, Contacts }
+const DB = {
     Contacts: ContactsModel(sequelize),
     ContactFiles: ContactFileModel(sequelize),
     Files: FileModel(sequelize),
     Templates: TemplateModel(sequelize),
-    Variables: VariablesModel(sequelize),
     Campaigns: campaignsModel(sequelize),
+    Variables: VariablesModel(sequelize),
     Mailbox: MailboxModel(sequelize),
     MailboxConfig: MailboxConfigModel(sequelize),
     sequelize, // connection instance (RAW queries)
     Sequelize, // library
 };
+
+DB.Campaigns.associate(DB);
+
+export { DB };

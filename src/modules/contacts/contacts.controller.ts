@@ -1,22 +1,21 @@
 import { Request, Response } from 'express';
-import ContactService, { getContact } from './contacts.service';
 import axios from 'axios';
 import { getFile } from '../files/files.service';
+import * as ContactService from './contacts.service';
 
 export const getAllContacts = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
-        const authorization = req.headers.authorization;
-
-        if (!authorization) {
-            res.status(404).json({ message: 'contact not found' });
+        const userId = req.user?.sub;
+        if (!userId) {
+            res.status(404).json({ error: 'User not found' });
             return;
         }
-        const accessToken = authorization.split(' ')[1];
-
-        const contacts = await getContact(accessToken);
+        const contacts = await ContactService.getAllContacts({
+            where: { userId },
+        });
         res.status(200).json({
             message: 'Data retrieved successfully',
             contacts,
@@ -36,11 +35,12 @@ export const createContact = async (
 ): Promise<void> => {
     try {
         const userId = req.user?.sub;
+        const { fileId } = req.params;
         if (!userId) {
             res.status(404).json({ error: 'User not found' });
             return;
         }
-        const { fileId, mappings } = req.body;
+        const { mappings } = req.body;
         const file = await getFile(fileId);
         if (!file) {
             res.status(404).json({ error: 'File not found' });
@@ -108,17 +108,18 @@ export const createContact = async (
     }
 };
 
-export const getContactId = async (
+export const getContactByFileId = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
-    try {
-        const { id } = req.params;
-        const contact = await ContactService.getContactById(id);
-        if (!contact) res.status(404).json({ error: 'Contact not found' });
-
-        res.status(200).json(contact);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve contact' });
+    const { fileId } = req.params;
+    const owner = req.user?.sub;
+    if (!owner) {
+        res.status(404).json({ error: 'User not found' });
+        return;
     }
+    const contacts = await ContactService.getAllContacts({
+        where: { fileId, userId: owner },
+    });
+    res.status(200).json(contacts);
 };

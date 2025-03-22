@@ -12,7 +12,7 @@ if (!region || !accessKeyId || !secretAccessKey) {
 
 export const s3Client = new S3Client({
     region,
-    endpoint: 'http://localhost.localstack.cloud:4577',
+    endpoint: 'http://localhost.localstack.cloud:4566',
     credentials: {
         accessKeyId,
         secretAccessKey,

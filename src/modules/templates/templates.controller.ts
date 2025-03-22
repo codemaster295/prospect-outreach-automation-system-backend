@@ -91,8 +91,8 @@ export const createTemplates = async (
         //      res.status(404).json({ error: 'User not found' });
         //      return;
         // }
-
-        const { subject, body, owner } = req.body;
+        const owner = req.user?.sub;
+        const { subject, body } = req.body;
 
         if (!subject || !body || !owner) {
             res.status(400).json({

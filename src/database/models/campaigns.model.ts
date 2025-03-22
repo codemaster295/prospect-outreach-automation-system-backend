@@ -10,6 +10,8 @@ export class CampaignsModel
     name!: string;
     audience!: string;
     template!: string;
+    mailbox!: string;
+    status!: string;
     delay!: {
         interval: number;
         unit: string;
@@ -19,13 +21,17 @@ export class CampaignsModel
     updatedAt: string | undefined;
     deletedAt: string | undefined;
     static associate(models: any) {
-        CampaignsModel.belongsTo(models.FileModel, {
+        CampaignsModel.belongsTo(models.Files, {
             foreignKey: 'audience',
-            as: 'file',
+            as: 'prospects_list',
         });
-        CampaignsModel.belongsTo(models.TemplateModel, {
+        CampaignsModel.belongsTo(models.Templates, {
             foreignKey: 'template',
-            as: 'templateData',
+            as: 'email_template',
+        });
+        CampaignsModel.belongsTo(models.Mailbox, {
+            foreignKey: 'mailbox',
+            as: 'sending_account',
         });
     }
 }
@@ -62,6 +68,20 @@ export default function (sequelize: Sequelize): typeof CampaignsModel {
                 },
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE',
+            },
+            mailbox: {
+                type: DataTypes.UUID,
+                allowNull: true,
+                references: {
+                    model: 'mailboxes',
+                    key: 'id',
+                },
+            },
+            status: {
+                type: DataTypes.ENUM,
+                allowNull: false,
+                defaultValue: 'draft',
+                values: ['draft', 'running', 'completed'],
             },
             delay: {
                 type: DataTypes.JSON,
