@@ -3,7 +3,7 @@ import {
     getAllFiles,
     createFile,
     generatePresignedUrl,
-    getFileFromS3,
+    getFileFromAzure,
 } from './files.service';
 import { CustomError } from '@/utils/custom-error';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,15 +34,11 @@ export const generatePresignedByUrl = async (req: Request, res: Response) => {
             throw new CustomError('User not found', 401);
         }
         const file_uuid = uuidv4();
-        const file_key = `pre_md_files/${user}/${file_uuid}`;
+        const file_key = `contact_files/${user}/${file_uuid}`;
         const file_name = req.query.fileName as string;
         const content_type = req.query.contentType as string;
 
-        const presignedUrl = await generatePresignedUrl(
-            file_key,
-            content_type,
-            'prospects-files',
-        );
+        const presignedUrl = await generatePresignedUrl(file_key, content_type);
         const token = jwt.sign(
             { file_uuid, file_name },
             process.env.JWT_SECRET as string,
@@ -97,8 +93,8 @@ export const redirectToFile = async (req: Request, res: Response) => {
     try {
         const user = req.params.userId;
         const file_uuid = req.params.uuid;
-        const object_name = `pre_md_files/${user}/${file_uuid}`;
-        const file_url = await getFileFromS3(object_name);
+        const object_name = `contact_files/${user}/${file_uuid}`;
+        const file_url = await getFileFromAzure(object_name);
         res.redirect(file_url);
     } catch (error) {
         res.status(500).json({ error: 'Failed to redirect to file' });
