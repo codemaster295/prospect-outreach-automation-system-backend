@@ -1,9 +1,11 @@
 import { DB } from '@/database/index';
 import { Files } from '@/interfaces/files.interfaces';
 import { FindOptions } from 'sequelize';
-import { PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { s3Client } from '@/clients/AwsClients';
+import { containerClient, sharedKeyCredential } from '@/clients/AzureClient';
+import {
+    BlobSASPermissions,
+    generateBlobSASQueryParameters,
+} from '@azure/storage-blob';
 const File = DB.Files;
 export const getAllFiles = async (query: FindOptions<Files>) => {
     try {
@@ -38,30 +40,50 @@ export const getFile = async (id: string) => {
 export const generatePresignedUrl = async (
     fileName: string,
     fileType: string,
-    bucketName: string,
 ) => {
-    const command = new PutObjectCommand({
-        Bucket: bucketName,
-        Key: fileName,
-        ContentType: fileType,
-    });
-
-    const signedUrl = await getSignedUrl(s3Client, command, {
-        expiresIn: 3600,
-    }); // URL valid for 1 hour
-
-    return signedUrl;
+    const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+    if (!process.env.AZURE_STORAGE_CONTAINER_NAME) {
+        throw new Error('Azure Storage container name is not set');
+    }
+    const sasOptions = {
+        containerName: process.env.AZURE_STORAGE_CONTAINER_NAME,
+        blobName: fileName,
+        permissions: BlobSASPermissions.parse('cw'), // Create and Write permissions
+        startsOn: new Date(),
+        expiresOn: new Date(new Date().valueOf() + 3600 * 1000), // 1 hour
+        contentType: fileType,
+    };
+    const sasToken = generateBlobSASQueryParameters(
+        sasOptions,
+        sharedKeyCredential,
+    ).toString();
+    const sasUrl = `${blockBlobClient.url}?${sasToken}`;
+    return sasUrl;
 };
 
-export const getFileFromS3 = async (object_name: string) => {
-    const command = new GetObjectCommand({
-        Bucket: 'prospects-files',
-        Key: object_name,
-    });
-    console.log(command);
-    const signedUrl = await getSignedUrl(s3Client, command, {
-        expiresIn: 3600,
-    });
-    console.log(signedUrl);
-    return signedUrl;
+export const getFileFromAzure = async (object_name: string) => {
+    const blockBlobClient = containerClient.getBlockBlobClient(object_name);
+    const exists = await blockBlobClient.exists();
+    if (!exists) {
+        throw new Error('File does not exist');
+    }
+    // Create a SAS token for reading
+    const sasOptions = {
+        containerName: process.env.AZURE_STORAGE_CONTAINER_NAME || '',
+        blobName: object_name,
+        permissions: BlobSASPermissions.parse('r'), // Read permission only
+        startsOn: new Date(),
+        expiresOn: new Date(new Date().valueOf() + 3600 * 1000), // 1 hour
+    };
+
+    // Generate SAS token
+    const sasToken = generateBlobSASQueryParameters(
+        sasOptions,
+        sharedKeyCredential,
+    ).toString();
+
+    // Construct the URL with SAS token
+    const sasUrl = `${blockBlobClient.url}?${sasToken}`;
+    console.log(`Generated read URL for ${object_name}: ${sasUrl}`);
+    return sasUrl;
 };

@@ -112,7 +112,7 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
             deletedAt: DataTypes.DATE,
         },
         {
-            tableName: 'Contacts',
+            tableName: 'contacts',
             sequelize,
             createdAt: 'createdAt',
             updatedAt: 'updatedAt',

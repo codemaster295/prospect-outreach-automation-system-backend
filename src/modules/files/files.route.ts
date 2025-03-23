@@ -1,8 +1,9 @@
 import express from 'express';
 import {
-    createFileController,
-    generatePresignedUrlController,
-    redirectToFileController,
+    getAllFile,
+    generatePresignedByUrl,
+    redirectToFile,
+    createFiles,
 } from './files.controller';
 import { requiresAuth } from '@/middlewares/auth0.middleware';
 const filesRouter = express.Router();
@@ -11,9 +12,9 @@ const filesRouter = express.Router();
 filesRouter.get(
     '/generate-presigned-url',
     requiresAuth,
-    generatePresignedUrlController,
+    generatePresignedByUrl,
 );
-filesRouter.post('/create-file', requiresAuth, createFileController);
-filesRouter.get('/:userId/:uuid', redirectToFileController);
+filesRouter.post('/create-file/:campaignId', requiresAuth, createFiles);
+filesRouter.get('/:userId/:uuid', redirectToFile);
 
 export default filesRouter;

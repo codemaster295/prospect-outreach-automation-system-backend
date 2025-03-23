@@ -1,36 +1,9 @@
 import { Request, Response } from 'express';
-import ContactService, { getContactService } from './contacts.service';
 import axios from 'axios';
 import { getFile } from '../files/files.service';
+import * as ContactService from './contacts.service';
 
-export const getAllContactsController = async (
-    req: Request,
-    res: Response,
-): Promise<void> => {
-    try {
-        const authorization = req.headers.authorization;
-
-        if (!authorization) {
-            res.status(404).json({ message: 'contact not found' });
-            return;
-        }
-        const accessToken = authorization.split(' ')[1];
-
-        const contacts = await getContactService(accessToken);
-        res.status(200).json({
-            message: 'Data retrieved successfully',
-            contacts,
-        });
-    } catch (error: any) {
-        console.error('Error in getAllContactsController:', error);
-        res.status(500).json({
-            error: 'Failed to retrieve contacts',
-            details: error.message,
-        });
-    }
-};
-
-export const createContactController = async (
+export const getAllContacts = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
@@ -40,7 +13,34 @@ export const createContactController = async (
             res.status(404).json({ error: 'User not found' });
             return;
         }
-        const { fileId, mappings } = req.body;
+        const contacts = await ContactService.getAllContacts({
+            where: { userId },
+        });
+        res.status(200).json({
+            message: 'Data retrieved successfully',
+            contacts,
+        });
+    } catch (error: any) {
+        console.error('Error in getAllContacts:', error);
+        res.status(500).json({
+            error: 'Failed to retrieve contacts',
+            details: error.message,
+        });
+    }
+};
+
+export const createContact = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const userId = req.user?.sub;
+        const { fileId } = req.params;
+        if (!userId) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+        const { mappings } = req.body;
         const file = await getFile(fileId);
         if (!file) {
             res.status(404).json({ error: 'File not found' });
@@ -100,7 +100,7 @@ export const createContactController = async (
             createdContacts,
         });
     } catch (error: any) {
-        console.error('Error in createContactController:', error);
+        console.error('Error in createContact:', error);
         res.status(500).json({
             error: 'Failed to create contact',
             details: error.message,
@@ -108,80 +108,18 @@ export const createContactController = async (
     }
 };
 
-export const getContactByIdController = async (
+export const getContactByFileId = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
-    try {
-        const { id } = req.params;
-        const contact = await ContactService.getContactById(id);
-        if (!contact) res.status(404).json({ error: 'Contact not found' });
-
-        res.status(200).json(contact);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve contact' });
+    const { fileId } = req.params;
+    const owner = req.user?.sub;
+    if (!owner) {
+        res.status(404).json({ error: 'User not found' });
+        return;
     }
+    const contacts = await ContactService.getAllContacts({
+        where: { fileId, userId: owner },
+    });
+    res.status(200).json(contacts);
 };
-
-// const ContactController = {
-//   // Get all contacts
-//   async getAllContacts(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const contacts = await ContactService.getAllContacts();
-//       return res.status(200).json(contacts);
-//     } catch (error) {
-//       return res.status(500).json({ error: 'Failed to retrieve contacts' });
-//     }
-//   },
-
-//   // Get a contact by ID
-//   async getContactById(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { id } = req.params;
-//       const contact = await ContactService.getContactById(id);
-//       if (!contact) return res.status(404).json({ error: 'Contact not found' });
-
-//       return res.status(200).json(contact);
-//     } catch (error) {
-//       return res.status(500).json({ error: 'Failed to retrieve contact' });
-//     }
-//   },
-
-//   // Create a new contact
-//   async createContact(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const newContact = await ContactService.createContact(req.body);
-//       return res.status(201).json(newContact);
-//     } catch (error) {
-//       return res.status(500).json({ error: 'Failed to create contact' });
-//     }
-//   },
-
-//   // Update a contact
-//   async updateContact(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { id } = req.params;
-//       const updatedContact = await ContactService.updateContact(id, req.body);
-//       if (!updatedContact) return res.status(404).json({ error: 'Contact not found' });
-
-//       return res.status(200).json(updatedContact);
-//     } catch (error) {
-//       return res.status(500).json({ error: 'Failed to update contact' });
-//     }
-//   },
-
-//   // Soft delete a contact
-//   async deleteContact(req: Request, res: Response): Promise<Response> {
-//     try {
-//       const { id } = req.params;
-//       const deleted = await ContactService.deleteContact(id);
-//       if (!deleted) return res.status(404).json({ error: 'Contact not found' });
-
-//       return res.status(200).json({ message: 'Contact deleted successfully' });
-//     } catch (error) {
-//       return res.status(500).json({ error: 'Failed to delete contact' });
-//     }
-//   },
-// };
-
-// export default ContactController;

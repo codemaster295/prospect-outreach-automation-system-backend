@@ -39,7 +39,7 @@ export default function (sequelize: Sequelize): typeof FileModel {
             deletedAt: DataTypes.DATE,
         },
         {
-            tableName: 'Files',
+            tableName: 'files',
             sequelize,
             createdAt: 'createdAt',
             updatedAt: 'updatedAt',

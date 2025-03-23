@@ -12,7 +12,8 @@
         "lint": "eslint --ignore-path .gitignore --ext .ts src/",
         "lint:fix": "npm run lint -- --fix",
         "migration:generate": "sequelize migration:generate --name",
-        "migration": "sequelize db:migrate"
+        "migration": "sequelize db:migrate",
+        "seed": "sequelize db:seed:all"
     },
     "author": "Pius Restiantoro",
     "license": "MIT",
@@ -21,12 +22,11 @@
         "url": "https://github.com/pius706975/express-typescript-sequelize-boilerplate.git"
     },
     "dependencies": {
-        "@aws-sdk/client-s3": "3.758.0",
-        "@aws-sdk/s3-request-presigner": "^3.758.0",
-        "axios": "^1.8.1",
+        "@azure/storage-blob": "^12.27.0",
+        "axios": "^1.8.3",
         "bcrypt": "^5.1.1",
         "cors": "^2.8.5",
-        "dotenv": "^16.4.5",
+        "dotenv": "^16.4.7",
         "express": "^4.21.1",
         "express-oauth2-jwt-bearer": "^1.6.0",
         "joi": "^17.13.3",
@@ -36,6 +36,7 @@
         "multer": "^1.4.5-lts.1",
         "multer-s3": "^3.0.1",
         "mysql2": "^3.12.0",
+        "openai": "^4.87.3",
         "pg": "^8.13.0",
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.37.4",
@@ -46,7 +47,8 @@
         "tsconfig-paths": "^4.2.0",
         "uuid": "^11.1.0",
         "winston": "^3.15.0",
-        "winston-daily-rotate-file": "^5.0.0"
+        "winston-daily-rotate-file": "^5.0.0",
+        "xml-js": "^1.6.11"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
@@ -57,7 +59,7 @@
         "@types/mime-types": "^2.1.4",
         "@types/multer": "^1.4.12",
         "@types/multer-s3": "^3.0.3",
-        "@types/node": "^22.10.5",
+        "@types/node": "^22.13.10",
         "@types/pg": "^8.11.10",
         "@types/sequelize": "^4.28.20",
         "@types/swagger-jsdoc": "^6.0.4",
@@ -75,6 +77,6 @@
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
         "tsc-alias": "^1.8.10",
-        "typescript": "^5.7.3"
+        "typescript": "^5.8.2"
     }
 }

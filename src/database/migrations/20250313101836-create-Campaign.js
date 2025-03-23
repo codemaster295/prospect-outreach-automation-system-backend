@@ -3,19 +3,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('ContactFiles', {
+        await queryInterface.createTable('campaigns', {
             id: {
                 allowNull: false,
+                autoIncrement: true,
                 primaryKey: true,
-                type: Sequelize.UUID,
-                defaultValue: Sequelize.UUIDV4,
+                type: Sequelize.INTEGER,
             },
-            fileUrl: {
+            audience: {
+                type: Sequelize.UUIDV4,
+                allowNull: false,
+            },
+            name: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            uploadedBy: {
-                type: Sequelize.STRING,
+            template: {
+                type: Sequelize.UUIDV4,
+                allowNull: false,
+            },
+            delay: {
+                type: Sequelize.JSON, // Storing `interval` and `unit` as JSON
                 allowNull: false,
             },
             createdAt: {
@@ -32,7 +40,8 @@ module.exports = {
             },
         });
     },
+
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('ContactFiles');
+        await queryInterface.dropTable('campaigns');
     },
 };

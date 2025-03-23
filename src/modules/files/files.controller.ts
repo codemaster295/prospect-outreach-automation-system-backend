@@ -3,13 +3,14 @@ import {
     getAllFiles,
     createFile,
     generatePresignedUrl,
-    getFileFromS3,
+    getFileFromAzure,
 } from './files.service';
 import { CustomError } from '@/utils/custom-error';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { verifyJWT } from '@/middlewares/jwt.service';
-export const getAllFilesController = async (req: Request, res: Response) => {
+import { updateCampaignById } from '@/modules/campaign/campaigns.service';
+export const getAllFile = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
         if (!user) {
@@ -26,25 +27,18 @@ export const getAllFilesController = async (req: Request, res: Response) => {
     }
 };
 
-export const generatePresignedUrlController = async (
-    req: Request,
-    res: Response,
-) => {
+export const generatePresignedByUrl = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
         if (!user) {
             throw new CustomError('User not found', 401);
         }
         const file_uuid = uuidv4();
-        const file_key = `pre_md_files/${user}/${file_uuid}`;
+        const file_key = `contact_files/${user}/${file_uuid}`;
         const file_name = req.query.fileName as string;
         const content_type = req.query.contentType as string;
 
-        const presignedUrl = await generatePresignedUrl(
-            file_key,
-            content_type,
-            'prospects-files',
-        );
+        const presignedUrl = await generatePresignedUrl(file_key, content_type);
         const token = jwt.sign(
             { file_uuid, file_name },
             process.env.JWT_SECRET as string,
@@ -58,9 +52,10 @@ export const generatePresignedUrlController = async (
     }
 };
 
-export const createFileController = async (req: Request, res: Response) => {
+export const createFiles = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
+        const campaignId = req.params.campaignId;
         if (!user) {
             throw new CustomError('User not found', 401);
         }
@@ -82,6 +77,11 @@ export const createFileController = async (req: Request, res: Response) => {
             updatedAt: new Date().toISOString(),
             deletedAt: undefined,
         });
+
+        await updateCampaignById(campaignId, {
+            audience: fileData.id,
+        });
+
         res.status(200).json(fileData);
     } catch (error) {
         console.log(error, 'error');
@@ -89,12 +89,12 @@ export const createFileController = async (req: Request, res: Response) => {
     }
 };
 
-export const redirectToFileController = async (req: Request, res: Response) => {
+export const redirectToFile = async (req: Request, res: Response) => {
     try {
         const user = req.params.userId;
         const file_uuid = req.params.uuid;
-        const object_name = `pre_md_files/${user}/${file_uuid}`;
-        const file_url = await getFileFromS3(object_name);
+        const object_name = `contact_files/${user}/${file_uuid}`;
+        const file_url = await getFileFromAzure(object_name);
         res.redirect(file_url);
     } catch (error) {
         res.status(500).json({ error: 'Failed to redirect to file' });
