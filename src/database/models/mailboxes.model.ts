@@ -13,6 +13,12 @@ export class MailboxModel
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
+    static associate(models: any) {
+        MailboxModel.hasOne(models.Campaigns, {
+            foreignKey: 'mailbox',
+            as: 'campaign',
+        });
+    }
 }
 
 export default function (sequelize: Sequelize): typeof MailboxModel {

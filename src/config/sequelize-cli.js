@@ -8,4 +8,6 @@ module.exports = {
     storage: DB_STORAGE || './data/prospects_db.sqlite',
     migrationStorageTableName: 'sequelize_migrations',
     seederStorageTableName: 'sequelize_seeds',
+    seederStorage: 'sequelize',
+    seederStoragePath: 'sequelize',
 };

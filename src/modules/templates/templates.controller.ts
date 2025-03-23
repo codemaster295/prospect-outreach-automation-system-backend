@@ -6,8 +6,10 @@ import {
     updateTemplateById,
     deleteTemplate,
     getTemplatesByUser,
+    getTemplate,
 } from './templates.service';
-
+import { updateCampaignById } from '../campaign/campaigns.service';
+import { CustomError } from '@/utils/custom-error';
 export const getTemplatesUser = async (
     req: Request,
     res: Response,
@@ -85,23 +87,26 @@ export const createTemplates = async (
     res: Response,
 ): Promise<void> => {
     try {
-        // const userId = req.user?.sub; // `sub` is typically used for user ID in JWT
-
-        // if (!userId) {
-        //      res.status(404).json({ error: 'User not found' });
-        //      return;
-        // }
         const owner = req.user?.sub;
-        const { subject, body } = req.body;
+        if (!owner) {
+            throw new CustomError('Unauthorized', 401);
+        }
+        const { data, campaignId } = req.body;
+        const { subject, body, name } = data;
 
-        if (!subject || !body || !owner) {
-            res.status(400).json({
-                message: 'Subject, body, and owner are required',
-            });
-            return;
+        if (!subject || !body) {
+            throw new CustomError('Subject and body are required', 400);
         }
 
-        const newTemplate = await createTemplate(subject, body, owner);
+        const newTemplate = await createTemplate({
+            subject,
+            body,
+            owner,
+            name,
+        });
+        if (campaignId) {
+            await updateCampaignById(campaignId, { template: newTemplate.id });
+        }
         res.status(201).json({
             message: 'Template created successfully',
             template: newTemplate,
@@ -120,17 +125,21 @@ export const updateTemplates = async (
     res: Response,
 ): Promise<void> => {
     try {
-        const { id } = req.params;
-        const { subject, body, owner } = req.body;
-
-        if (owner !== undefined) {
-            res.status(403).json({
-                message: 'Updating owner field is not allowed',
-            });
-            return;
+        const owner = req.user?.sub;
+        if (!owner) {
+            throw new CustomError('Unauthorized', 401);
         }
-
-        const updatedTemplate = await updateTemplateById(id, subject, body);
+        const { id } = req.params;
+        const { subject, body, name } = req.body;
+        const template = await getTemplate({ where: { id, owner } });
+        if (!template) {
+            throw new CustomError('Template not found', 404);
+        }
+        const updatedTemplate = await updateTemplateById(id, {
+            subject,
+            body,
+            name,
+        });
         if (!updatedTemplate) {
             res.status(404).json({ message: 'Template not found' });
             return;

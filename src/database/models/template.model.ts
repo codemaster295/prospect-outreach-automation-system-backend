@@ -10,6 +10,7 @@ export class TemplateModel
     subject!: string;
     body!: string;
     owner!: string;
+    name!: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
@@ -29,6 +30,10 @@ export default function (sequelize: Sequelize): typeof TemplateModel {
                 allowNull: false,
             },
             body: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            name: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },

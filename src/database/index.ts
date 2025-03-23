@@ -49,5 +49,6 @@ const DB = {
 };
 
 DB.Campaigns.associate(DB);
+DB.Mailbox.associate(DB);
 
 export { DB };

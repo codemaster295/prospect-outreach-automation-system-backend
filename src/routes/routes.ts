@@ -13,7 +13,7 @@ const router = express.Router();
 router.use('/user', requiresAuth, userRouter);
 router.use('/contacts', requiresAuth, contactRouter);
 router.use('/files', filesRouter);
-router.use('/vairables', variableRouter);
+router.use('/variables', variableRouter);
 router.use('/templates', templateRouter);
 router.use('/campaigns', campaignRouter);
 router.use('/mailboxes', mailboxRouter);

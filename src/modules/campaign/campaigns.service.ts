@@ -23,6 +23,7 @@ export const updateCampaignById = async (
         template?: string;
         delay?: { interval: number; unit: string };
         owner?: string;
+        mailbox?: string;
     },
 ) => {
     return await Campaign.update(data, { where: { id } });

@@ -1,5 +1,6 @@
 import { DB } from '@/database/index';
 import { MailboxType } from '@/interfaces/mailboxes.interfaces';
+import { FindOptions } from 'sequelize';
 const Mailbox = DB.Mailbox;
 export const createMailbox = async (
     senderEmail: string,
@@ -10,22 +11,13 @@ export const createMailbox = async (
     return mailbox;
 };
 
-export const getMailbox = async (
-    email: string,
-    owner: string,
-    additionalWhere: any = {},
-) => {
-    const mailbox = await Mailbox.findOne({
-        where: { senderEmail: email, owner, ...additionalWhere },
-    });
+export const getMailbox = async (query: FindOptions) => {
+    const mailbox = await Mailbox.findOne(query);
     return mailbox;
 };
 
-export const getAllMailboxes = async (owner: string) => {
+export const getAllMailboxes = async (query: FindOptions) => {
     // cleaned response from sequelize
-    const mailboxes = await Mailbox.findAll({
-        where: { owner },
-        raw: true,
-    });
+    const mailboxes = await Mailbox.findAll(query);
     return mailboxes;
 };

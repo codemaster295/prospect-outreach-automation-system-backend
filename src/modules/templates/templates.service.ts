@@ -1,6 +1,7 @@
 import { DB } from '@database/index';
 import { verifyJWT } from '@/middlewares/jwt.service';
 import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
+import { FindOptions } from 'sequelize';
 
 const Template = DB.Templates;
 
@@ -11,34 +12,23 @@ export const getAllTemplate = async () => {
 export const getTemplateById = async (id: string) => {
     return await Template.findByPk(id);
 };
+
+export const getTemplate = async (query: FindOptions) => {
+    return await Template.findAll(query);
+};
 export const getTemplatesByUser = async (userId: string) => {
     return await Template.findAll({
         where: { owner: userId },
     });
 };
 
-export const createTemplate = async (
-    subject: string,
-    body: string,
-    owner: string,
-) => {
-    return await Template.create({ subject, body, owner });
+export const createTemplate = async (data: any) => {
+    return await Template.create(data);
 };
 
-export const updateTemplateById = async (
-    id: string,
-    subject: string,
-    body: string,
-) => {
-    const template = await Template.findByPk(id);
-    if (!template) return null;
-
-    await template.update({ subject, body });
-    return template;
+export const updateTemplateById = async (id: string, data: any) => {
+    return await Template.update(data, { where: { id } });
 };
-// export const updateTemplateById = async (id:string) => {
-//     return await Template.findByPk(id);
-//     // if (!template) return null;
 
 //     // await template.update({ subject, body, owner });
 //     // return template;
