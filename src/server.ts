@@ -6,11 +6,10 @@ import { DB } from '@database/index';
 import { PORT } from './config';
 import { errorHandler } from './utils/error-handler';
 import { swaggerSpec, swaggerUi } from './utils/swagger';
-import contactRouter from './modules/contacts/contact.routes';
 import './testEmailGenerator';
 
 const appServer = express();
-const port = PORT;
+const port = PORT || 5050;
 
 const corsOptions = {
     origin: '*',
