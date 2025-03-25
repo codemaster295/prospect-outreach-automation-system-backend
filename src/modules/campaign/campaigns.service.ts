@@ -1,6 +1,5 @@
 import { DB } from '@database/index';
 import { verifyJWT } from '@/middlewares/jwt.service';
-import { JWT_ACCESS_TOKEN_SECRET } from '@/config';
 import { FindOptions } from 'sequelize';
 
 const Campaign = DB.Campaigns;

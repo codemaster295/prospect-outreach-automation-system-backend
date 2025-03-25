@@ -4,12 +4,12 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.changeColumn('campaigns', 'audience', {
-            type: Sequelize.UUIDV4, // Use Sequelize.UUID instead of Sequelize.UUIDV4 for column type
+            type: Sequelize.UUID, // Use Sequelize.UUID instead of Sequelize.UUIDV4 for column type
             allowNull: true, // Allow NULL values
         });
 
         await queryInterface.changeColumn('campaigns', 'template', {
-            type: Sequelize.UUIDV4,
+            type: Sequelize.UUID,
             allowNull: true,
         });
 
@@ -25,12 +25,12 @@ module.exports = {
 
     async down(queryInterface, Sequelize) {
         await queryInterface.changeColumn('campaigns', 'audience', {
-            type: Sequelize.UUIDV4,
+            type: Sequelize.UUID,
             allowNull: false, // Revert back to NOT NULL
         });
 
         await queryInterface.changeColumn('campaigns', 'template', {
-            type: Sequelize.UUIDV4,
+            type: Sequelize.UUID,
             allowNull: false,
         });
 

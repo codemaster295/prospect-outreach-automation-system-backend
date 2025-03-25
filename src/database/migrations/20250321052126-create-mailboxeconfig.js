@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.INTEGER,
     },
       mailbox: {
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
         allowNull: false,
       },
       key: {

@@ -11,7 +11,7 @@ module.exports = {
                 type: Sequelize.INTEGER,
             },
             audience: {
-                type: Sequelize.UUIDV4,
+                type: Sequelize.UUID,
                 allowNull: false,
             },
             name: {
@@ -19,7 +19,7 @@ module.exports = {
                 allowNull: false,
             },
             template: {
-                type: Sequelize.UUIDV4,
+                type: Sequelize.UUID,
                 allowNull: false,
             },
             delay: {

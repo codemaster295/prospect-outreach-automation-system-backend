@@ -10,7 +10,7 @@ module.exports = {
             values: ['draft', 'running', 'completed'],
         });
         await queryInterface.addColumn('campaigns', 'mailbox', {
-            type: Sequelize.UUIDV4,
+            type: Sequelize.UUID,
             allowNull: true,
             defaultValue: null,
         });

@@ -55,8 +55,7 @@ Make sure you have installed the following tools:
     DB_NAME = db name
     DB_HOST = host
     DB_DIALECT = dialect
-    
-    JWT_ACCESS_TOKEN_SECRET = JWT secret
+   
    ```
 
 ## 🏃 Run the server and the test
