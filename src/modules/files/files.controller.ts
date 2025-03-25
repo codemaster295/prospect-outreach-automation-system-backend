@@ -5,6 +5,7 @@ import {
     generatePresignedUrl,
     getFileFromAzure,
 } from './files.service';
+import { v4 as uuidv4 } from 'uuid';
 import { CustomError } from '@/utils/custom-error';
 import jwt from 'jsonwebtoken';
 import { verifyJWT } from '@/middlewares/jwt.service';
@@ -32,7 +33,7 @@ export const generatePresignedByUrl = async (req: Request, res: Response) => {
         if (!user) {
             throw new CustomError('User not found', 401);
         }
-        const file_uuid = UUID();
+        const file_uuid = uuidv4();
         const file_key = `contact_files/${user}/${file_uuid}`;
         const file_name = req.query.fileName as string;
         const content_type = req.query.contentType as string;
