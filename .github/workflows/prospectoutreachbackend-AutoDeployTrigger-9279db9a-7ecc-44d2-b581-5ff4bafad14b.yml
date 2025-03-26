@@ -1,4 +1,4 @@
-name: Trigger auto deployment for prospectaicontainer
+name: Trigger auto deployment for prospectoutreachbackend
 
 # When this action will be executed
 on:
@@ -8,7 +8,7 @@ on:
       [ main ]
     paths:
     - '**'
-    - '.github/workflows/prospectaicontainer-AutoDeployTrigger-9279db9a-7ecc-44d2-b581-5ff4bafad14b.yml'
+    - '.github/workflows/prospectoutreachbackend-AutoDeployTrigger-9279db9a-7ecc-44d2-b581-5ff4bafad14b.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -33,14 +33,14 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
+          dockerfilePath: Dockerfile
           registryUrl: prospectoutreachbackendacr.azurecr.io
           registryUsername: ${{ secrets.PROSPECTAICONTAINER_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.PROSPECTAICONTAINER_REGISTRY_PASSWORD }}
-          containerAppName: prospectaicontainer
+          containerAppName: prospectoutreachbackend
           resourceGroup: prospect-outreach
-          imageToBuild: prospectoutreachbackendacr.azurecr.io/prospectaicontainer:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
+          imageToBuild: prospectoutreachbackendacr.azurecr.io/prospectoutreachbackend:${{ github.sha }}
+          buildArguments: |
+            buildArgumentsValues
 
 
