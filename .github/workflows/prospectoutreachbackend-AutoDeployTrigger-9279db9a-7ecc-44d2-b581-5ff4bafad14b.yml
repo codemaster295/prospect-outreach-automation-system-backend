@@ -37,7 +37,7 @@ jobs:
           registryUrl: prospectoutreachbackendacr.azurecr.io
           registryUsername: ${{ secrets.PROSPECTAICONTAINER_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.PROSPECTAICONTAINER_REGISTRY_PASSWORD }}
-          containerAppName: prospectoutreachbackend
+          containerAppName: prospectaicontainer
           resourceGroup: prospect-outreach
           imageToBuild: prospectoutreachbackendacr.azurecr.io/prospectoutreachbackend:${{ github.sha }}
 
