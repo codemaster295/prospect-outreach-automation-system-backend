@@ -40,7 +40,6 @@ jobs:
           containerAppName: prospectoutreachbackend
           resourceGroup: prospect-outreach
           imageToBuild: prospectoutreachbackendacr.azurecr.io/prospectoutreachbackend:${{ github.sha }}
-          buildArguments: |
-            buildArgumentsValues
+          buildArguments: buildArgumentsValues
 
 
