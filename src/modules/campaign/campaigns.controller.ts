@@ -144,6 +144,11 @@ export const updateCampaign = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
         const updatedCampaign = await updateCampaignById(id, req.body);
 
         res.status(200).json({
@@ -164,7 +169,26 @@ export const deleteCampaign = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
+
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const campaign = await getCampaign({
+            where: {
+                id,
+                owner,
+            },
+        });
+        if (!campaign) {
+            res.status(404).json({ message: 'Campaign not found' });
+            return;
+        }
         await deleteCampaignById(id);
+        res.status(200).json({
+            message: 'Campaign deleted successfully',
+        });
     } catch (error: any) {
         console.error('Error in deleteCampaigns:', error);
         res.status(500).json({

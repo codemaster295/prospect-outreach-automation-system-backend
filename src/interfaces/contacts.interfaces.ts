@@ -1,3 +1,9 @@
+export enum StatusType {
+    PENDING = 'pending',
+    SENT = 'sent',
+    FAILED = 'failed',
+}
+
 export interface Contacts {
     id?: string;
     userId: string;
@@ -17,6 +23,7 @@ export interface Contacts {
     companyCity: string;
     companyState: string;
     companyCountry: string;
+    status: StatusType;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;
