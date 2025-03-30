@@ -1,4 +1,3 @@
-
 export interface SentEmail {
     id?: string;
     messageId: string;

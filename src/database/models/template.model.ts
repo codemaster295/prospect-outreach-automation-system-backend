@@ -26,12 +26,18 @@ export default function (sequelize: Sequelize): typeof TemplateModel {
                 defaultValue: DataTypes.UUIDV4,
             },
             subject: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
+                validate: {
+                    len: [0, 500],
+                },
             },
             body: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
                 allowNull: false,
+                validate: {
+                    len: [0, 5000],
+                },
             },
             name: {
                 type: DataTypes.STRING,

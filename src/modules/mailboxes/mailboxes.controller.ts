@@ -20,6 +20,7 @@ export const createMailbox = async (req: Request, res: Response) => {
             mailbox,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

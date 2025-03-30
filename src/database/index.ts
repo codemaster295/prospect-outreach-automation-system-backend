@@ -16,7 +16,7 @@ import {
     DB_PORT,
 } from '@/config';
 import MailboxConfigModel from './models/mailboxconfig.model';
-import  SentEmailModel  from './models/sentemail.model';
+import SentEmailModel from './models/sentemail.model';
 
 const sequelize = new Sequelize.Sequelize(
     DB_DATABASE || 'prospect-db',
