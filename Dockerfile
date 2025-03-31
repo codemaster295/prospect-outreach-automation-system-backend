@@ -29,5 +29,7 @@ ENV NODE_ENV=production
 # Expose the port
 EXPOSE 3000
 
+RUN npm run migration
+
 # Start the application
 CMD ["node", "dist/server.js"]
