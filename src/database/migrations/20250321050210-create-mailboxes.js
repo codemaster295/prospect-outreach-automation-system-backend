@@ -13,16 +13,12 @@ module.exports = {
             senderEmail: {
                 type: Sequelize.STRING,
                 allowNull: false,
-                unique: true, // Ensuring unique email addresses
+                unique: true,
             },
             owner: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            // provider: {
-            //   type: Sequelize.ENUM('google', 'microsoft', 'smtp'),
-            //   allowNull: false,
-            // },
             provider: {
                 type: Sequelize.ENUM,
                 values: ['google', 'microsoft', 'smtp'],
