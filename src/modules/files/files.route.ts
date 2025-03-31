@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-    getAllFile,
     generatePresignedByUrl,
     redirectToFile,
     createFiles,

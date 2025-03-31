@@ -6,7 +6,6 @@ import {
     updateCampaignById,
     getCampaign,
 } from './campaigns.service';
-import { DB } from '@database/index';
 import { getUserProfile } from '../user/user.service';
 
 export const getAllCampaigns = async (

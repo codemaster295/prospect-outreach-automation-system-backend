@@ -1,5 +1,4 @@
 import { DB } from '@database/index';
-import { verifyJWT } from '@/middlewares/jwt.service';
 import { FindOptions } from 'sequelize';
 
 const Campaign = DB.Campaigns;

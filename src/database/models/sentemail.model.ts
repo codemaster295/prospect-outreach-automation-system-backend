@@ -45,10 +45,10 @@ export default function (sequelize: Sequelize): typeof SentEmailModel {
                 defaultValue: DataTypes.UUIDV4,
             },
             messageId: {
-                  type: DataTypes.STRING,
-                  allowNull: false,
-              },
-              campaignId: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            campaignId: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
@@ -79,23 +79,23 @@ export default function (sequelize: Sequelize): typeof SentEmailModel {
             subject: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              email: {
+            },
+            email: {
                 type: DataTypes.STRING,
                 allowNull: false,
-              },
-              template: {
+            },
+            template: {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
                     model: 'template',
                     key: 'id',
                 },
-              },
-              owner: {
+            },
+            owner: {
                 type: DataTypes.STRING,
-                 allowNull: false,
-              },
+                allowNull: false,
+            },
 
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,

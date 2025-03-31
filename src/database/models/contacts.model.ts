@@ -1,4 +1,4 @@
-import { Contacts ,StatusType} from '@/interfaces/contacts.interfaces';
+import { Contacts, StatusType } from '@/interfaces/contacts.interfaces';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 export type ContactCreationAttritubes = Optional<Contacts, 'id'>;
