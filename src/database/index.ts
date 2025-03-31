@@ -16,6 +16,7 @@ import {
     DB_PORT,
 } from '@/config';
 import MailboxConfigModel from './models/mailboxconfig.model';
+import SentEmailModel from './models/sentemail.model';
 
 const sequelize = new Sequelize.Sequelize(
     DB_DATABASE || 'prospect-db',
@@ -42,6 +43,7 @@ const DB = {
     Variables: VariablesModel(sequelize),
     Mailbox: MailboxModel(sequelize),
     MailboxConfig: MailboxConfigModel(sequelize),
+    SentEmail: SentEmailModel(sequelize),
     sequelize, // connection instance (RAW queries)
     Sequelize, // library
 };

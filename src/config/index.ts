@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 
 config();
+
 export const { PORT, NODE_ENV, BASE_URL, JWT_REFRESH_TOKEN_SECRET } =
     process.env;
 

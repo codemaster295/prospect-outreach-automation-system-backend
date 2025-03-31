@@ -1,5 +1,4 @@
 import { DB } from '@database/index';
-import { verifyJWT } from '@/middlewares/jwt.service';
 
 const Variable = DB.Variables;
 

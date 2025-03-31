@@ -1,4 +1,4 @@
-import { Contacts } from '@/interfaces/contacts.interfaces';
+import { Contacts, StatusType } from '@/interfaces/contacts.interfaces';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 export type ContactCreationAttritubes = Optional<Contacts, 'id'>;
@@ -25,6 +25,7 @@ export class ContactsModel
     public companyCity!: string;
     public companyState!: string;
     public companyCountry!: string;
+    public status!: StatusType;
     public createdAt: string | undefined;
     public updatedAt: string | undefined;
     public deletedAt: string | undefined;
@@ -106,6 +107,11 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
             companyCountry: {
                 type: DataTypes.STRING,
                 allowNull: true,
+            },
+            status: {
+                type: DataTypes.ENUM('pending', 'sent', 'failed'),
+                allowNull: true,
+                defaultValue: 'pending',
             },
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
