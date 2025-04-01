@@ -203,6 +203,21 @@ export const launchCampaign = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const campaign = await getCampaign({
+            where: {
+                id,
+                owner,
+            },
+        });
+        if (!campaign) {
+            res.status(404).json({ message: 'Campaign not found' });
+            return;
+        }
         if (!id) {
              res.status(400).json({ error: 'campaignId is required' });
              return;
