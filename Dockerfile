@@ -6,7 +6,6 @@ WORKDIR /app
 # Copy package.json and install dependencies
 COPY package.json package-lock.json ./
 RUN npm install
-
 # Copy source files and build
 COPY . .
 RUN npm run build  # Generates "dist" folder
@@ -28,8 +27,6 @@ ENV NODE_ENV=production
 
 # Expose the port
 EXPOSE 3000
-
-RUN npm run migration
 
 # Start the application
 CMD ["node", "dist/server.js"]
