@@ -52,14 +52,6 @@ export const getAllMailboxes = async (req: Request, res: Response) => {
     }
     const mailboxes = await mailboxRepo.getAllMailboxes({
         where: { owner },
-        include: [
-            {
-                association: 'campaign',
-                attributes: ['id'],
-                // attributes: ['id', 'name'],
-            },
-        ],
-        // raw: true,
     });
     const ownerInfo = await getUserProfile(owner);
     const mailBoxesData = [];
