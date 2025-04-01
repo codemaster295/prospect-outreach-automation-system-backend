@@ -30,9 +30,32 @@ export const updateCampaignById = async (
 export const deleteCampaignById = async (id: string) => {
     return await Campaign.destroy({ where: { id } });
 };
+
+export const campaignLaunch = async (id: string) => {
+    try {
+        const campaign = await Campaign.findOne({ where: { id } });
+
+        if (!campaign) {
+            throw new Error('Campaign not found');
+        }
+
+        if (!campaign.audience || !campaign.template || !campaign.mailbox) {
+            throw new Error('Missing required fields: audience, template, or mailbox');
+        }
+
+        campaign.status = 'running';
+        await campaign.save();
+
+        return { message: 'Campaign launched successfully', campaign };
+    } catch (error:any) {
+        throw new Error(error.message);
+    }
+};
+
 export default {
     getAllCampaign,
     createCampaign,
     updateCampaignById,
     deleteCampaignById,
+    campaignLaunch,
 };

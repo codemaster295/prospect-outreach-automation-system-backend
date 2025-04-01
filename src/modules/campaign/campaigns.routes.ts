@@ -5,6 +5,7 @@ import {
     createCampaigns,
     updateCampaign,
     deleteCampaign,
+    launchCampaign,
 } from './campaigns.controller';
 import { requiresAuth } from '@/middlewares/auth0.middleware';
 
@@ -24,5 +25,8 @@ campaignRouter.put('/:id', requiresAuth, updateCampaign);
 
 // Delete a campaign
 campaignRouter.delete('/:id', requiresAuth, deleteCampaign);
+
+campaignRouter.post('/launch/:id', requiresAuth, launchCampaign);
+
 
 export default campaignRouter;

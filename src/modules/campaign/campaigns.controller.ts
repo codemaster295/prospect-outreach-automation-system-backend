@@ -5,6 +5,7 @@ import {
     deleteCampaignById,
     updateCampaignById,
     getCampaign,
+    campaignLaunch,
 } from './campaigns.service';
 import { getUserProfile } from '../user/user.service';
 
@@ -195,4 +196,30 @@ export const deleteCampaign = async (
             details: error.message,
         });
     }
+};
+export const launchCampaign = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+             res.status(400).json({ error: 'campaignId is required' });
+             return;
+        }
+        const result = await campaignLaunch(id);
+         res.status(200).json(result);
+         return;
+    } catch (error:any) {
+         res.status(500).json({ error: error.message });
+         return;
+    }
+};
+export default {
+    getAllCampaigns,
+    getCampaignId,
+    createCampaigns,
+    updateCampaign,
+    deleteCampaign,
+    launchCampaign,
 };
