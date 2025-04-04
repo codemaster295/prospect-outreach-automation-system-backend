@@ -4,12 +4,46 @@ import {
     createFile,
     generatePresignedUrl,
     getFileFromAzure,
+  
 } from './files.service';
 import { v4 as uuidv4 } from 'uuid';
 import { CustomError } from '@/utils/custom-error';
 import jwt from 'jsonwebtoken';
 import { verifyJWT } from '@/middlewares/jwt.service';
 import { updateCampaignById } from '@/modules/campaign/campaigns.service';
+
+
+
+export const getAllfiledata = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+
+        const files = await getAllFiles({
+            where:{
+                uploadedBy:owner
+            }
+        });
+        res.status(200).json({
+            message: 'File retrieved successfully',
+            files,
+        });
+    } catch (error: any) {
+        console.error('Error in getAllfiledata:', error);
+        res.status(500).json({
+            error: 'Failed to retrieve File',
+            details: error.message,
+        });
+    }
+};
+
+
 export const getAllFile = async (req: Request, res: Response) => {
     try {
         const user = req.user?.sub;
