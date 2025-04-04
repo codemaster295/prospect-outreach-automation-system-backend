@@ -6,6 +6,10 @@ import { DB } from '@database/index';
 import { PORT } from './config';
 import { errorHandler } from './utils/error-handler';
 import { swaggerSpec, swaggerUi } from './utils/swagger';
+import cron from 'node-cron';
+import axios from 'axios';
+
+const PING_URL = 'https://prospect-ai-backend.codesprintconsulting.com/ping';
 
 const appServer = express();
 const port = PORT || 5050;
@@ -46,6 +50,24 @@ appServer.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Use the router with the /api prefix
 appServer.use('/', router);
+appServer.get('/ping', (req, res) => {
+    res.status(200).json({ message: 'pong' });
+});
+cron.schedule('*/5 * * * *', async () => {
+    try {
+        const response = await axios.get(PING_URL);
+        console.log(
+            `[${new Date().toISOString()}] Pinged successfully: ${
+                response.status
+            }`,
+        );
+    } catch (error: any) {
+        console.error(
+            `[${new Date().toISOString()}] Failed to ping:`,
+            error.message,
+        );
+    }
+});
 appServer.use(errorHandler);
 
 appServer.all('*', (req, res) => {
