@@ -2,7 +2,7 @@ import { DB } from '@database/index';
 import { FindOptions } from 'sequelize';
 
 const Campaign = DB.Campaigns;
-
+const Template = DB.Templates;
 export const getAllCampaign = async (query: FindOptions) => {
     return await Campaign.findAll(query);
 };
@@ -51,6 +51,43 @@ export const campaignLaunch = async (id: string) => {
         throw new Error(error.message);
     }
 };
+export const changeCampaignTemplate = async ({
+    campaignId,
+    templateId,
+    owner,
+  }: {
+    campaignId: string;
+    templateId: string;
+    owner: string;
+  }) => {
+    
+    const campaign = await Campaign.findOne({ where: { id: campaignId, owner } });
+    if (!campaign) {
+      throw new Error('Campaign not found or unauthorized');
+    }
+  
+    
+    const template = await Template.findOne({ where: { id: templateId, owner } });
+    if (!template) {
+      throw new Error('Template not found or unauthorized');
+    }
+  
+  
+    if (!template.subject?.trim() || !template.body?.trim()) {
+      throw new Error('Template must have both subject and body');
+    }
+  
+    
+    await Campaign.update(
+      { template: templateId },
+      { where: { id: campaignId } }
+    );
+  
+  
+    const updated = await Campaign.findOne({ where: { id: campaignId } });
+    return updated;
+  };
+
 
 export default {
     getAllCampaign,
@@ -58,4 +95,5 @@ export default {
     updateCampaignById,
     deleteCampaignById,
     campaignLaunch,
+    changeCampaignTemplate
 };
