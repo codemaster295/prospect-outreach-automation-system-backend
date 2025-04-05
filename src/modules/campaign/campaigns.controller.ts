@@ -6,6 +6,7 @@ import {
     updateCampaignById,
     getCampaign,
     campaignLaunch,
+    changeCampaignTemplate,
 } from './campaigns.service';
 import { getUserProfile } from '../user/user.service';
 import { Op } from 'sequelize';
@@ -131,7 +132,7 @@ export const createCampaigns = async (
             name,
             owner,
         });
-        console.log(newCampaign, 'newCampaign');
+      
         res.status(201).json({
             message: 'Campaign created successfully',
             campaign: newCampaign,
@@ -236,6 +237,33 @@ export const launchCampaign = async (
         return;
     }
 };
+
+export const updateCampaignTemplate = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const { id: campaignId, templateId } = req.params;
+      const owner = req.user?.sub;
+  
+      if (!owner) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+  
+      const updatedCampaign = await changeCampaignTemplate({ campaignId, templateId, owner });
+  
+      res.status(200).json({
+        message: 'Campaign template updated successfully',
+        campaign: updatedCampaign,
+      });
+    } catch (error: any) {
+      console.error('Error in updateCampaignTemplate:', error);
+      res.status(400).json({
+        error: error.message || 'Failed to update campaign template',
+      });
+    }
+  };
 export default {
     getAllCampaigns,
     getCampaignId,
