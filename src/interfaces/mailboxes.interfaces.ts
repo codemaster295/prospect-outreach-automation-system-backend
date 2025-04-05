@@ -1,7 +1,7 @@
 export enum MailboxType {
     GOOGLE = 'google',
     MICROSOFT = 'microsoft',
-    SMTP = 'smtp',
+    CUSTOM = 'custom',
 }
 export interface Mailbox {
     id?: string;

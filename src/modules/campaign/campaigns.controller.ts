@@ -8,6 +8,7 @@ import {
     campaignLaunch,
 } from './campaigns.service';
 import { getUserProfile } from '../user/user.service';
+import { Op } from 'sequelize';
 
 export const getAllCampaigns = async (
     req: Request,
@@ -15,6 +16,7 @@ export const getAllCampaigns = async (
 ): Promise<void> => {
     try {
         const owner = req.user?.sub;
+        const { search = '' } = req.query;
         if (!owner) {
             res.status(401).json({ message: 'Unauthorized' });
             return;
@@ -22,6 +24,9 @@ export const getAllCampaigns = async (
         const campaigns = await getAllCampaign({
             where: {
                 owner,
+                name: {
+                    [Op.like]: `%${search}%`,
+                },
             },
             include: [
                 {
@@ -37,6 +42,7 @@ export const getAllCampaigns = async (
                 'status',
                 'mailbox',
             ],
+            order: [['createdAt', 'DESC']],
         });
         const user = await getUserProfile(owner);
         const campaignsData = [];
@@ -219,15 +225,15 @@ export const launchCampaign = async (
             return;
         }
         if (!id) {
-             res.status(400).json({ error: 'campaignId is required' });
-             return;
+            res.status(400).json({ error: 'campaignId is required' });
+            return;
         }
         const result = await campaignLaunch(id);
-         res.status(200).json(result);
-         return;
-    } catch (error:any) {
-         res.status(500).json({ error: error.message });
-         return;
+        res.status(200).json(result);
+        return;
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+        return;
     }
 };
 export default {

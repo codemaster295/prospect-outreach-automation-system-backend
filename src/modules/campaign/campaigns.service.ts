@@ -12,6 +12,9 @@ export const getCampaign = async (query: FindOptions) => {
 export const createCampaign = async (data: any) => {
     return await Campaign.create(data);
 };
+export const getTotalCampaigns = async (query: FindOptions) => {
+    return await Campaign.count(query);
+};
 
 export const updateCampaignById = async (
     id: string,
@@ -40,14 +43,16 @@ export const campaignLaunch = async (id: string) => {
         }
 
         if (!campaign.audience || !campaign.template || !campaign.mailbox) {
-            throw new Error('Missing required fields: audience, template, or mailbox');
+            throw new Error(
+                'Missing required fields: audience, template, or mailbox',
+            );
         }
 
         campaign.status = 'running';
         await campaign.save();
 
         return { message: 'Campaign launched successfully', campaign };
-    } catch (error:any) {
+    } catch (error: any) {
         throw new Error(error.message);
     }
 };

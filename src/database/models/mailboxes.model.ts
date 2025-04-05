@@ -40,7 +40,7 @@ export default function (sequelize: Sequelize): typeof MailboxModel {
             },
             provider: {
                 type: DataTypes.ENUM,
-                values: ['google', 'microsoft', 'smtp'],
+                values: ['google', 'microsoft', 'custom'],
                 allowNull: false,
             },
 

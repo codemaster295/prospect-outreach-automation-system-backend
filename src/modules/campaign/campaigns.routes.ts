@@ -28,5 +28,4 @@ campaignRouter.delete('/:id', requiresAuth, deleteCampaign);
 
 campaignRouter.post('/launch/:id', requiresAuth, launchCampaign);
 
-
 export default campaignRouter;
