@@ -3,8 +3,8 @@ import { FindOptions } from 'sequelize';
 
 const Template = DB.Templates;
 
-export const getAllTemplate = async () => {
-    return await Template.findAll();
+export const getAllTemplate = async (query: FindOptions) => {
+    return await Template.findAll(query);
 };
 
 export const getTemplateById = async (id: string) => {

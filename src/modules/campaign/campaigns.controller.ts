@@ -7,9 +7,11 @@ import {
     getCampaign,
     campaignLaunch,
     changeCampaignTemplate,
+    bulkDeleteCampaigns,
 } from './campaigns.service';
 import { getUserProfile } from '../user/user.service';
 import { Op } from 'sequelize';
+import { getSentEmail } from '../sent-emails/sent-email.services';
 
 export const getAllCampaigns = async (
     req: Request,
@@ -41,7 +43,8 @@ export const getAllCampaigns = async (
                 'createdAt',
                 'updatedAt',
                 'status',
-                'mailbox',
+                'audience',
+                'template',
             ],
             order: [['createdAt', 'DESC']],
         });
@@ -65,6 +68,64 @@ export const getAllCampaigns = async (
         });
     }
 };
+export const bulkDeleteCampaignsByIds = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const { ids } = req.body;
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        await bulkDeleteCampaigns(ids, owner);
+        res.status(200).json({ message: 'Campaigns deleted successfully' });
+    } catch (error: any) {
+        console.error('Error in bulkDeleteCampaigns:', error);
+        res.status(500).json({
+            error: 'Failed to delete campaigns',
+            details: error.message,
+        });
+    }
+};
+export const getSentEmailForContact = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const { id, contactId } = req.params;
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const sentEmail = await getSentEmail({
+            where: {
+                to: contactId,
+                campaignId: id,
+                owner,
+            },
+            include: [
+                {
+                    association: 'base_template',
+                    attributes: ['id', 'name'],
+                },
+            ],
+        });
+        res.status(200).json({
+            message: 'Sent email retrieved successfully',
+            sentEmail,
+        });
+    } catch (error: any) {
+        console.error('Error in getSentEmail:', error);
+        res.status(500).json({
+            error: 'Failed to retrieve sent email',
+            details: error.message,
+        });
+    }
+};
+
 export const getCampaignId = async (
     req: Request,
     res: Response,
@@ -132,7 +193,7 @@ export const createCampaigns = async (
             name,
             owner,
         });
-      
+
         res.status(201).json({
             message: 'Campaign created successfully',
             campaign: newCampaign,
@@ -240,30 +301,34 @@ export const launchCampaign = async (
 
 export const updateCampaignTemplate = async (
     req: Request,
-    res: Response
-  ): Promise<void> => {
+    res: Response,
+): Promise<void> => {
     try {
-      const { id: campaignId, templateId } = req.params;
-      const owner = req.user?.sub;
-  
-      if (!owner) {
-        res.status(401).json({ message: 'Unauthorized' });
-        return;
-      }
-  
-      const updatedCampaign = await changeCampaignTemplate({ campaignId, templateId, owner });
-  
-      res.status(200).json({
-        message: 'Campaign template updated successfully',
-        campaign: updatedCampaign,
-      });
+        const { id: campaignId, templateId } = req.params;
+        const owner = req.user?.sub;
+
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+
+        const updatedCampaign = await changeCampaignTemplate({
+            campaignId,
+            templateId,
+            owner,
+        });
+
+        res.status(200).json({
+            message: 'Campaign template updated successfully',
+            campaign: updatedCampaign,
+        });
     } catch (error: any) {
-      console.error('Error in updateCampaignTemplate:', error);
-      res.status(400).json({
-        error: error.message || 'Failed to update campaign template',
-      });
+        console.error('Error in updateCampaignTemplate:', error);
+        res.status(400).json({
+            error: error.message || 'Failed to update campaign template',
+        });
     }
-  };
+};
 export default {
     getAllCampaigns,
     getCampaignId,

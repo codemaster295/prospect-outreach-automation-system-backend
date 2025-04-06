@@ -7,6 +7,8 @@ import {
     deleteCampaign,
     launchCampaign,
     updateCampaignTemplate,
+    bulkDeleteCampaignsByIds,
+    getSentEmailForContact,
 } from './campaigns.controller';
 
 const campaignRouter = express.Router();
@@ -25,9 +27,11 @@ campaignRouter.put('/:id', updateCampaign);
 
 // Delete a campaign
 campaignRouter.delete('/:id', deleteCampaign);
+campaignRouter.delete('/delete/bulk-delete', bulkDeleteCampaignsByIds);
 
 campaignRouter.post('/launch/:id', launchCampaign);
 
 campaignRouter.put('/:id/change-template/:templateId', updateCampaignTemplate);
+campaignRouter.get('/:id/sent-mail/:contactId', getSentEmailForContact);
 
 export default campaignRouter;
