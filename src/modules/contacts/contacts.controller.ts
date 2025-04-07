@@ -2,23 +2,48 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import { getFile } from '../files/files.service';
 import * as ContactService from './contacts.service';
-
+import { Op } from 'sequelize';
 export const getAllContacts = async (
     req: Request,
     res: Response,
 ): Promise<void> => {
     try {
         const userId = req.user?.sub;
+        const { search = '' } = req.query;
+        console.log(search,"dasdasd")
         if (!userId) {
             res.status(404).json({ error: 'User not found' });
             return;
         }
         const contacts = await ContactService.getAllContacts({
-            where: { userId },
-        });
+            where: {
+                userId,
+                // firstName: {
+                //   [Op.iLike]: `%${search}%`, // case-insensitive match
+                // },
+                 [Op.or]: [
+                    { firstName: { [Op.iLike]: `%${search}%` } },
+                    { lastName: { [Op.iLike]: `%${search}%` } },
+                    { email: { [Op.iLike]: `%${search}%` } },
+                    { title: { [Op.iLike]: `%${search}%` } },
+                    { companyName: { [Op.iLike]: `%${search}%` } },
+                    ],
+              },
+              attributes: [
+                'id',
+                'firstName',
+                'lastName',
+                'email',
+                'title',
+                'companyName',
+            ],
+              order: [['createdAt', 'DESC']],
+        
+        })
         res.status(200).json({
             message: 'Data retrieved successfully',
             contacts,
+            search
         });
     } catch (error: any) {
         console.error('Error in getAllContacts:', error);
@@ -36,6 +61,7 @@ export const createContact = async (
     try {
         const userId = req.user?.sub;
         const { fileId } = req.params;
+        
         if (!userId) {
             res.status(404).json({ error: 'User not found' });
             return;
