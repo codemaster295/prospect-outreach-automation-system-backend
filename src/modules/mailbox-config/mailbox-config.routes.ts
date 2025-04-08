@@ -1,6 +1,6 @@
 import express from 'express';
 import { requiresAuth } from '@/middlewares/auth0.middleware';
-import { createMailboxConfig } from './mailbox-config.controller';
+import { createMailboxConfig, disconnectMailbox } from './mailbox-config.controller';
 const mailboxConfigRouter = express.Router();
 
 mailboxConfigRouter.post(
@@ -8,5 +8,6 @@ mailboxConfigRouter.post(
     requiresAuth,
     createMailboxConfig,
 );
+mailboxConfigRouter.delete('/:mailboxId',requiresAuth,disconnectMailbox)
 
 export default mailboxConfigRouter;
