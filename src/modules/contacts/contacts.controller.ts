@@ -149,3 +149,34 @@ export const getContactByFileId = async (
     });
     res.status(200).json(contacts);
 };
+export const deleteContactsBulk = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.sub;
+    const { ids } = req.body;
+
+    if (!userId) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      res.status(400).json({ error: 'No contact IDs provided' });
+      return;
+    }
+
+    const deletedCount = await ContactService.deleteContactsBulk(ids);
+    res.status(200).json({
+      message: 'Contacts deleted successfully',
+      deletedCount,
+    });
+  } catch (error: any) {
+    console.error('Error in deleteContactsBulk:', error);
+    res.status(500).json({
+      error: 'Failed to delete contacts',
+      details: error.message,
+    });
+  }
+};
