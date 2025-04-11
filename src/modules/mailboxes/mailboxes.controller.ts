@@ -3,6 +3,10 @@ import * as campaignService from '@/modules/campaign/campaigns.service';
 import { Request, Response } from 'express';
 import { MailboxType } from '@/interfaces/mailboxes.interfaces';
 import { getUserProfile } from '@/modules/user/user.service';
+import { campaignUpdate, disconnectMailboxService } from './mailbox.service';
+import { disconnectMailboxconfigService } from '../mailbox-config/mailbox-config.service';
+import { updateCampaignById } from '../campaign/campaigns.service';
+
 export const createMailbox = async (req: Request, res: Response) => {
     try {
         const { senderEmail, provider } = req.body;
@@ -121,3 +125,28 @@ export const getMailboxById = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const disconnectMailbox = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const mailboxId = req.params.mailboxId
+      const ownerId = req.user?.sub
+  
+      if (!ownerId) {
+        res.status(401).json({ message: 'Unauthorized' })
+        return
+      }
+ 
+      await disconnectMailboxconfigService(mailboxId);
+      await disconnectMailboxService(mailboxId, ownerId)
+      await campaignUpdate('campaignId123', { mailbox: null,});
+      res.status(200).json({ message: 'Mailbox disconnected successfully' })
+    } catch (error) {
+      if (error instanceof Error && error.message === 'MAILBOX_NOT_FOUND') {
+        res.status(404).json({ message: 'Mailbox not found or unauthorized' })
+      } else {
+        console.error('Error disconnecting mailbox:', error)
+        res.status(500).json({ message: 'Internal server error' })
+      }
+    }   
+  }
+  
