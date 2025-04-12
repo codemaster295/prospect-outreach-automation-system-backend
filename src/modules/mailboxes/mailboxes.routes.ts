@@ -15,5 +15,5 @@ mailboxRouter.get('/:email', requiresAuth, getMailboxes);
 mailboxRouter.get('/', requiresAuth, getAllMailboxes);
 mailboxRouter.get('/mailbox/:id', requiresAuth, getMailboxById);
 mailboxRouter.post('/assign', requiresAuth, assignMailbox);
-mailboxRouter.delete('/:mailboxId',requiresAuth,disconnectMailbox)
+mailboxRouter.delete('/:mailboxId', requiresAuth, disconnectMailbox);
 export default mailboxRouter;

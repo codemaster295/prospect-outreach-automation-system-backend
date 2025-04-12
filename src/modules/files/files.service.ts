@@ -1,13 +1,13 @@
 import { DB } from '@/database/index';
 import { Files } from '@/interfaces/files.interfaces';
-import { FindAndCountOptions, FindOptions } from 'sequelize';
+import { FindAndCountOptions, FindOptions, DestroyOptions } from 'sequelize';
 import { containerClient, sharedKeyCredential } from '@/clients/AzureClient';
 import {
     BlobSASPermissions,
     generateBlobSASQueryParameters,
 } from '@azure/storage-blob';
 const File = DB.Files;
-const Contact = DB.Contacts
+const Contact = DB.Contacts;
 export const getAllFiles = async (query: FindOptions<Files>) => {
     try {
         const files = await File.findAll(query);
@@ -19,7 +19,7 @@ export const getAllFiles = async (query: FindOptions<Files>) => {
 };
 export const getAllFilesData = async (options: FindAndCountOptions) => {
     return File.findAndCountAll(options);
-  };
+};
 export const createFile = async (data: Files) => {
     try {
         const file = await File.create(data);
@@ -90,31 +90,8 @@ export const getFileFromAzure = async (object_name: string) => {
     console.log(`Generated read URL for ${object_name}: ${sasUrl}`);
     return sasUrl;
 };
-export const deleteFilesByIds = async (fileIds: string[], userId: string) => {
-    try {
-        console.log('🔄 Starting bulk delete for files:', fileIds);
-        console.log('👤 Requested by userId:', userId);
-    
-        // Delete contacts first
-        const contactsDeleted = await Contact.destroy({
-          where: {
-            fileId: fileIds,
-          },
-        });
-        console.log(`🗑️ Deleted ${contactsDeleted} contacts linked to files.`);
-    
-        // Then delete files
-        const filesDeleted = await File.destroy({
-          where: {
-            id: fileIds,
-            uploadedBy: userId,
-          },
-        });
-        console.log(`🗂️ Deleted ${filesDeleted} files uploaded by user.`);
-    
-        return filesDeleted;
-      } catch (error) {
-        console.error('❌ Error deleting files and contacts:', error);
-        throw error;
-      }
-  };
+
+export const deleteFilesByIds = async (query: DestroyOptions) => {
+    const deletedCount = await File.destroy(query);
+    return deletedCount;
+};

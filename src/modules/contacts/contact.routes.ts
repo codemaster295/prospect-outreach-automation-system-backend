@@ -1,5 +1,9 @@
 import express from 'express';
-import { createContact, deleteContactsBulk, getAllContacts } from './contacts.controller';
+import {
+    createContact,
+    deleteContactsBulk,
+    getAllContacts,
+} from './contacts.controller';
 import { requiresAuth } from '@/middlewares/auth0.middleware';
 const contactRouter = express.Router();
 
