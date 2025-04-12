@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import { getFile } from '../files/files.service';
 import * as ContactService from './contacts.service';
+import { Op, fn, col, where } from 'sequelize';
 
 export const getAllContacts = async (
     req: Request,
@@ -9,16 +10,71 @@ export const getAllContacts = async (
 ): Promise<void> => {
     try {
         const userId = req.user?.sub;
+        const { fileId } = req.params;
         if (!userId) {
             res.status(404).json({ error: 'User not found' });
             return;
         }
-        const contacts = await ContactService.getAllContacts({
-            where: { userId },
-        });
+        const search = (req.query.search as string) || '';
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const isPagination = !!req.query.page || !!req.query.limit;
+        console.log('is pagination', isPagination);
+        const offset = 0 + (page - 1) * limit;
+
+        const searchFilter = search
+            ? {
+                  [Op.or]: [
+                      where(
+                          fn('LOWER', col('firstName')),
+                          'LIKE',
+                          `%${search.toLowerCase()}%`,
+                      ),
+                      where(
+                          fn('LOWER', col('lastName')),
+                          'LIKE',
+                          `%${search.toLowerCase()}%`,
+                      ),
+                      where(
+                          fn('LOWER', col('email')),
+                          'LIKE',
+                          `%${search.toLowerCase()}%`,
+                      ),
+                      where(
+                          fn('LOWER', col('title')),
+                          'LIKE',
+                          `%${search.toLowerCase()}%`,
+                      ),
+                      where(
+                          fn('LOWER', col('companyName')),
+                          'LIKE',
+                          `%${search.toLowerCase()}%`,
+                      ),
+                  ],
+              }
+            : {};
+        // Handle paginated + searchable response
+        const { rows: contacts, count: total } =
+            await ContactService.getPaginatedContacts({
+                where: {
+                    fileId,
+                    userId,
+                    ...searchFilter,
+                },
+                offset,
+                limit,
+                order: [['createdAt', 'DESC']],
+            });
+
         res.status(200).json({
             message: 'Data retrieved successfully',
-            contacts,
+            data: contacts,
+            pagination: {
+                total,
+                totalPages: Math.ceil(total / limit),
+                currentPage: page,
+                perPage: limit,
+            },
         });
     } catch (error: any) {
         console.error('Error in getAllContacts:', error);
@@ -36,6 +92,7 @@ export const createContact = async (
     try {
         const userId = req.user?.sub;
         const { fileId } = req.params;
+
         if (!userId) {
             res.status(404).json({ error: 'User not found' });
             return;
@@ -122,4 +179,42 @@ export const getContactByFileId = async (
         where: { fileId, userId: owner },
     });
     res.status(200).json(contacts);
+};
+export const deleteContactsBulk = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    try {
+        const userId = req.user?.sub;
+        const { ids } = req.body;
+
+        if (!userId) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+
+        if (!Array.isArray(ids) || ids.length === 0) {
+            res.status(400).json({ error: 'No contact IDs provided' });
+            return;
+        }
+
+        const deletedCount = await ContactService.deleteContactsBulk({
+            where: {
+                id: {
+                    [Op.in]: ids,
+                    userId,
+                },
+            },
+        });
+        res.status(200).json({
+            message: 'Contacts deleted successfully',
+            deletedCount,
+        });
+    } catch (error: any) {
+        console.error('Error in deleteContactsBulk:', error);
+        res.status(500).json({
+            error: 'Failed to delete contacts',
+            details: error.message,
+        });
+    }
 };

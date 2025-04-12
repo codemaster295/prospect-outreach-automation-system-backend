@@ -4,7 +4,7 @@ import {
     redirectToFile,
     createFiles,
     getAllfiledata,
-    
+    deleteFilesBulk,
 } from './files.controller';
 import { requiresAuth } from '@/middlewares/auth0.middleware';
 const filesRouter = express.Router();
@@ -17,7 +17,6 @@ filesRouter.get(
 );
 filesRouter.post('/create-file/:campaignId', requiresAuth, createFiles);
 filesRouter.get('/:userId/:uuid', redirectToFile);
-filesRouter.get('/', requiresAuth,getAllfiledata);
-// filesRouter.get('/:id', requiresAuth, getFileByid);
-
+filesRouter.get('/', requiresAuth, getAllfiledata);
+filesRouter.delete('/:bulkdelete', requiresAuth, deleteFilesBulk);
 export default filesRouter;

@@ -8,5 +8,4 @@ mailboxConfigRouter.post(
     requiresAuth,
     createMailboxConfig,
 );
-
 export default mailboxConfigRouter;

@@ -1,15 +1,15 @@
 export interface Campaigns {
     id?: string;
     name: string;
-    audience?: string;
-    template?: string;
-    delay?: {
+    audience: string | null;
+    template: string | null;
+    delay: {
         interval: number;
         unit: string;
     };
-    mailbox?: string;
-    status?: string;
-    owner?: string;
+    mailbox: string | null;
+    status: string;
+    owner: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;

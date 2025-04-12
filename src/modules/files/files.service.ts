@@ -1,12 +1,13 @@
 import { DB } from '@/database/index';
 import { Files } from '@/interfaces/files.interfaces';
-import { FindOptions } from 'sequelize';
+import { FindAndCountOptions, FindOptions, DestroyOptions } from 'sequelize';
 import { containerClient, sharedKeyCredential } from '@/clients/AzureClient';
 import {
     BlobSASPermissions,
     generateBlobSASQueryParameters,
 } from '@azure/storage-blob';
 const File = DB.Files;
+const Contact = DB.Contacts;
 export const getAllFiles = async (query: FindOptions<Files>) => {
     try {
         const files = await File.findAll(query);
@@ -16,7 +17,9 @@ export const getAllFiles = async (query: FindOptions<Files>) => {
         throw new Error('Database query failed');
     }
 };
-
+export const getAllFilesData = async (options: FindAndCountOptions) => {
+    return File.findAndCountAll(options);
+};
 export const createFile = async (data: Files) => {
     try {
         const file = await File.create(data);
@@ -86,4 +89,9 @@ export const getFileFromAzure = async (object_name: string) => {
     const sasUrl = `${blockBlobClient.url}?${sasToken}`;
     console.log(`Generated read URL for ${object_name}: ${sasUrl}`);
     return sasUrl;
+};
+
+export const deleteFilesByIds = async (query: DestroyOptions) => {
+    const deletedCount = await File.destroy(query);
+    return deletedCount;
 };

@@ -27,12 +27,15 @@ export const updateCampaignById = async (
         template?: string;
         delay?: { interval: number; unit: string };
         owner?: string;
-        mailbox?: string;
+        mailbox?: string | null;
     },
 ) => {
     return await Campaign.update(data, { where: { id } });
 };
 
+export const updateCampaign = async (fields: any, where: any) => {
+    return await Campaign.update(fields ?? {}, { where });
+};
 export const deleteCampaignById = async (id: string) => {
     return await Campaign.destroy({ where: { id } });
 };
