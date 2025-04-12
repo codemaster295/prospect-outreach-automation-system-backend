@@ -5,10 +5,7 @@ import { MailboxType } from '@/interfaces/mailboxes.interfaces';
 import { getUserProfile } from '@/modules/user/user.service';
 import { disconnectMailboxService } from './mailbox.service';
 import { disconnectMailboxconfigService } from '../mailbox-config/mailbox-config.service';
-import {
-    updateCampaign,
-    updateCampaignById,
-} from '../campaign/campaigns.service';
+import { updateCampaign } from '../campaign/campaigns.service';
 
 export const createMailbox = async (req: Request, res: Response) => {
     try {
