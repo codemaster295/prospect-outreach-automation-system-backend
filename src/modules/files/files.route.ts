@@ -17,6 +17,6 @@ filesRouter.get(
 );
 filesRouter.post('/create-file/:campaignId', requiresAuth, createFiles);
 filesRouter.get('/:userId/:uuid', redirectToFile);
-filesRouter.get('/', requiresAuth,getAllfiledata);
+filesRouter.get('/', requiresAuth, getAllfiledata);
 filesRouter.delete('/:bulkdelete', requiresAuth, deleteFilesBulk);
 export default filesRouter;

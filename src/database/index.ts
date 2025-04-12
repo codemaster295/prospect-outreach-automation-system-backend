@@ -50,5 +50,6 @@ const DB = {
 
 DB.Campaigns.associate(DB);
 DB.Mailbox.associate(DB);
+DB.SentEmail.associate(DB);
 
 export { DB };

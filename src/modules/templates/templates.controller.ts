@@ -43,7 +43,12 @@ export const getAllTemplates = async (
     res: Response,
 ): Promise<void> => {
     try {
-        const templates = await getAllTemplate();
+        const owner = req.user?.sub;
+        if (!owner) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const templates = await getAllTemplate({ where: { owner } });
 
         res.status(200).json({
             message: 'Templates retrieved successfully',

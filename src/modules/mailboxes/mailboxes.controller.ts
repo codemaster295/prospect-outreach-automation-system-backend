@@ -7,6 +7,7 @@ import { disconnectMailboxService } from './mailbox.service';
 import { disconnectMailboxconfigService } from '../mailbox-config/mailbox-config.service';
 import { updateCampaign } from '../campaign/campaigns.service';
 
+import { testSMTPConnection, testImapConnection } from './mailboxes.services';
 export const createMailbox = async (req: Request, res: Response) => {
     try {
         const { senderEmail, provider } = req.body;
@@ -159,5 +160,48 @@ export const disconnectMailbox = async (
             console.error('Error disconnecting mailbox:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
+    }
+};
+export const testConnection = async (req: Request, res: Response) => {
+    try {
+        const { type, config = {} } = req.body;
+        if (!type) {
+            throw new Error('Specify a test type, (SMTP/IMAP)');
+        }
+        ['host', 'port', 'auth.user', 'auth.pass'].forEach(path => {
+            const value = path.split('.').reduce((o, i) => o?.[i], config);
+            if (!value)
+                throw new Error(`Missing required field: config.${path}`);
+        });
+        config.port = parseInt(config.port);
+        switch (type.toLowerCase()) {
+            case 'smtp':
+                await testSMTPConnection({
+                    host: config.host,
+                    port: config.port,
+                    auth: {
+                        user: config.auth.user,
+                        pass: config.auth.pass,
+                    },
+                });
+                break;
+            case 'imap':
+                await testImapConnection({
+                    host: config.host,
+                    port: config.port,
+                    auth: {
+                        user: config.auth.user,
+                        pass: config.auth.pass,
+                    },
+                });
+                break;
+            default:
+                throw new Error('Invalid test type');
+        }
+        res.status(200).json('ok');
+    } catch (error) {
+        res.status(500).json({
+            message: (error as any)?.response || 'Internal server error',
+        });
     }
 };

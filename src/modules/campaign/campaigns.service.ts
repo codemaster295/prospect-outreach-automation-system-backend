@@ -1,8 +1,8 @@
 import { DB } from '@database/index';
-import { FindOptions, UpdateOptions } from 'sequelize';
+import { FindOptions, Op } from 'sequelize';
 
 const Campaign = DB.Campaigns;
-
+const Template = DB.Templates;
 export const getAllCampaign = async (query: FindOptions) => {
     return await Campaign.findAll(query);
 };
@@ -11,6 +11,12 @@ export const getCampaign = async (query: FindOptions) => {
 };
 export const createCampaign = async (data: any) => {
     return await Campaign.create(data);
+};
+export const getTotalCampaigns = async (query: FindOptions) => {
+    return await Campaign.count(query);
+};
+export const bulkDeleteCampaigns = async (ids: string[], owner: string) => {
+    return await Campaign.destroy({ where: { id: { [Op.in]: ids }, owner } });
 };
 
 export const updateCampaignById = async (
@@ -56,6 +62,41 @@ export const campaignLaunch = async (id: string) => {
         throw new Error(error.message);
     }
 };
+export const changeCampaignTemplate = async ({
+    campaignId,
+    templateId,
+    owner,
+}: {
+    campaignId: string;
+    templateId: string;
+    owner: string;
+}) => {
+    const campaign = await Campaign.findOne({
+        where: { id: campaignId, owner },
+    });
+    if (!campaign) {
+        throw new Error('Campaign not found or unauthorized');
+    }
+
+    const template = await Template.findOne({
+        where: { id: templateId, owner },
+    });
+    if (!template) {
+        throw new Error('Template not found or unauthorized');
+    }
+
+    if (!template.subject?.trim() || !template.body?.trim()) {
+        throw new Error('Template must have both subject and body');
+    }
+
+    await Campaign.update(
+        { template: templateId },
+        { where: { id: campaignId } },
+    );
+
+    const updated = await Campaign.findOne({ where: { id: campaignId } });
+    return updated;
+};
 
 export default {
     getAllCampaign,
@@ -63,4 +104,5 @@ export default {
     updateCampaignById,
     deleteCampaignById,
     campaignLaunch,
+    changeCampaignTemplate,
 };
