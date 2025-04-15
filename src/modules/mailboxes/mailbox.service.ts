@@ -22,3 +22,6 @@ export const disconnectMailboxService = async (
         },
     });
 };
+export const getPaginatedMailbox = (query: any) => {
+    return Mailbox.findAndCountAll(query);
+};

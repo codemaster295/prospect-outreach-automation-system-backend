@@ -6,6 +6,7 @@ import {
     updateTemplates,
     deleteTemplates,
     getTemplatesUser,
+    deleteTemplatesBulk,
 } from './templates.controller';
 import { requiresAuth } from '@/middlewares/auth0.middleware';
 const templateRouter = express.Router();
@@ -24,5 +25,6 @@ templateRouter.put('/:id', requiresAuth, updateTemplates);
 
 // Delete a template (soft delete)
 templateRouter.delete('/:id', requiresAuth, deleteTemplates);
+templateRouter.delete('/delete/bulkdelete', requiresAuth, deleteTemplatesBulk);
 
 export default templateRouter;

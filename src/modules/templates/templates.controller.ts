@@ -7,9 +7,13 @@ import {
     deleteTemplate,
     getTemplatesByUser,
     getTemplate,
+    getPaginatedTemplate,
+    deleteTemplateBulk,
 } from './templates.service';
 import { updateCampaignById } from '../campaign/campaigns.service';
 import { CustomError } from '@/utils/custom-error';
+import { Op, fn, col, where } from 'sequelize';
+
 export const getTemplatesUser = async (
     req: Request,
     res: Response,
@@ -41,27 +45,63 @@ export const getTemplatesUser = async (
 export const getAllTemplates = async (
     req: Request,
     res: Response,
-): Promise<void> => {
+  ): Promise<void> => {
     try {
-        const owner = req.user?.sub;
-        if (!owner) {
-            res.status(401).json({ message: 'Unauthorized' });
-            return;
-        }
-        const templates = await getAllTemplate({ where: { owner } });
-
-        res.status(200).json({
-            message: 'Templates retrieved successfully',
-            templates,
-        });
+      const owner = req.user?.sub
+  
+      if (!owner) {
+        res.status(401).json({ message: 'Unauthorized' })
+        return
+      }
+  
+      const search = (req.query.search as string) || ''
+      const page = parseInt(req.query.page as string) || 1
+      const limit = parseInt(req.query.limit as string) || 10
+      const offset = (page - 1) * limit
+  
+      console.log('[TEMPLATE] Params =>', { search, page, limit, offset, owner })
+  
+      const searchFilter = search
+        ? {
+            [Op.or]: [
+              where(fn('LOWER', col('name')), 'LIKE', `%${search.toLowerCase()}%`),
+              // Add more fields if needed:
+              // where(fn('LOWER', col('subject')), 'LIKE', `%${search.toLowerCase()}%`),
+            ],
+          }
+        : {}
+  
+      const { rows: templates, count: total } = await getPaginatedTemplate({
+        where: {
+          owner,
+          ...searchFilter,
+        },
+        offset,
+        limit,
+        order: [['createdAt', 'DESC']],
+      })
+  
+      console.log('[TEMPLATE] Found templates:', templates.length)
+  
+      res.status(200).json({
+        message: 'Templates retrieved successfully',
+        data: templates,
+        pagination: {
+          total,
+          totalPages: Math.ceil(total / limit),
+          currentPage: page,
+          perPage: limit,
+        },
+      })
     } catch (error: any) {
-        console.error('Error in getAllTemplates:', error);
-        res.status(500).json({
-            error: 'Failed to retrieve templates',
-            details: error.message,
-        });
+      console.error('[TEMPLATE] Error in getAllTemplates:', error)
+      res.status(500).json({
+        error: 'Failed to retrieve templates',
+        details: error.message,
+      })
     }
-};
+  }
+
 export const getTemplateId = async (
     req: Request,
     res: Response,
@@ -185,3 +225,43 @@ export const deleteTemplates = async (
         });
     }
 };
+export const deleteTemplatesBulk = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.sub;
+      const { ids } = req.body;
+  
+      if (!userId) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+      }
+  
+      if (!Array.isArray(ids) || ids.length === 0) {
+        res.status(400).json({ error: 'No template IDs provided' });
+        return;
+      }
+  
+      const deletedCount = await deleteTemplateBulk({
+        where: {
+          id: {
+            [Op.in]: ids,
+          },
+          owner: userId,
+        },
+      });
+  
+      res.status(200).json({
+        message: 'Templates deleted successfully',
+        deletedCount,
+      });
+    } catch (error: any) {
+      console.error('Error in deleteTemplatesBulk:', error);
+      res.status(500).json({
+        error: 'Failed to delete templates',
+        details: error.message,
+      });
+    }
+  };
+  
