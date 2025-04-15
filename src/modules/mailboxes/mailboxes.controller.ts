@@ -3,10 +3,10 @@ import * as campaignService from '@/modules/campaign/campaigns.service';
 import { Request, Response } from 'express';
 import { MailboxType } from '@/interfaces/mailboxes.interfaces';
 import { getUserProfile } from '@/modules/user/user.service';
-import { disconnectMailboxService } from './mailbox.service';
+import { disconnectMailboxService, getPaginatedMailbox } from './mailbox.service';
 import { disconnectMailboxconfigService } from '../mailbox-config/mailbox-config.service';
 import { updateCampaign } from '../campaign/campaigns.service';
-
+import { Op, fn, col, where } from 'sequelize';
 import { testSMTPConnection, testImapConnection } from './mailboxes.services';
 export const createMailbox = async (req: Request, res: Response) => {
     try {
@@ -49,25 +49,66 @@ export const getMailboxes = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+export const getAllMailboxes = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const owner = req.user?.sub;
+  
+      if (!owner) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+  
+      const search = (req.query.search as string) || '';
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const offset = (page - 1) * limit;
+  
+      console.log('[MAILBOX] Params =>', { search, page, limit, offset, owner });
+  
+      const searchFilter = search
+        ? {
+            [Op.or]: [
+              where(fn('LOWER', col('senderEmail')), 'LIKE', `%${search.toLowerCase()}%`),
+            ],
+          }
+        : {};
+  
+      const { rows: mailboxes, count: total } = await getPaginatedMailbox({
+        where: {
+          owner,
+          ...searchFilter,
+        },
+        offset,
+        limit,
+        order: [['createdAt', 'DESC']],
+      });
+  
+      const ownerInfo = await getUserProfile(owner);
+  
+      const mailBoxesData = mailboxes.map((mailbox: any) => ({
+        ...mailbox.dataValues,
+        created_by: ownerInfo.nickname,
+      }));
+  
+      res.status(200).json({
+        message: 'Mailboxes retrieved successfully',
+        data: mailBoxesData,
+        pagination: {
+          total,
+          totalPages: Math.ceil(total / limit),
+          currentPage: page,
+          perPage: limit,
+        },
+      });
+    } catch (error: any) {
+      console.error('[MAILBOX] Error in getAllMailboxes:', error);
+      res.status(500).json({
+        error: 'Failed to retrieve mailboxes',
+        details: error.message,
+      });
+    }
+  };
 
-export const getAllMailboxes = async (req: Request, res: Response) => {
-    const owner = req.user?.sub;
-    if (!owner) {
-        throw new Error('Unauthorized');
-    }
-    const mailboxes = await mailboxRepo.getAllMailboxes({
-        where: { owner },
-    });
-    const ownerInfo = await getUserProfile(owner);
-    const mailBoxesData = [];
-    for (const mailbox of mailboxes) {
-        mailBoxesData.push({
-            ...mailbox.dataValues,
-            created_by: ownerInfo.nickname,
-        });
-    }
-    res.status(200).json({ mailboxes: mailBoxesData });
-};
 export const assignMailbox = async (req: Request, res: Response) => {
     try {
         const { campaignId, mailboxId } = req.body;
