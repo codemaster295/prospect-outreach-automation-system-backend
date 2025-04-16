@@ -61,10 +61,7 @@ export const getAllMailboxes = async (req: Request, res: Response): Promise<void
       const search = (req.query.search as string) || '';
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
-      const offset = (page - 1) * limit;
-  
-      console.log('[MAILBOX] Params =>', { search, page, limit, offset, owner });
-  
+      const offset = (page - 1) * limit;  
       const searchFilter = search
         ? {
             [Op.or]: [
