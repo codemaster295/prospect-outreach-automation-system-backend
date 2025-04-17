@@ -86,6 +86,7 @@ export const getAllTemplates = async (
       res.status(200).json({
         message: 'Templates retrieved successfully',
         data: templates,
+        hasMore: page < Math.ceil(total / limit),
         pagination: {
           total,
           totalPages: Math.ceil(total / limit),

@@ -90,6 +90,8 @@ export const getAllMailboxes = async (req: Request, res: Response): Promise<void
       res.status(200).json({
         message: 'Mailboxes retrieved successfully',
         data: mailBoxesData,
+        hasMore: page < Math.ceil(total / limit),
+
         pagination: {
           total,
           totalPages: Math.ceil(total / limit),
