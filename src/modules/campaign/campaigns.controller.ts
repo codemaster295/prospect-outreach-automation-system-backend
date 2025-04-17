@@ -66,6 +66,8 @@ export const getAllCampaigns = async (
         res.status(200).json({
             message: 'Campaigns retrieved successfully',
             campaigns: campaignsData,
+        hasMore: page < Math.ceil(total / limit),
+
             pagination: {
                 total,
                 totalPages: Math.ceil(total / limit),
