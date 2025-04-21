@@ -8,6 +8,7 @@ import {
     campaignLaunch,
     changeCampaignTemplate,
     bulkDeleteCampaigns,
+    createDefaultSchedule,
 } from './campaigns.service';
 import { getUserProfile } from '../user/user.service';
 import { Op } from 'sequelize';
@@ -193,7 +194,9 @@ export const createCampaigns = async (
             name,
             owner,
         });
-
+        if (newCampaign.id) {
+            await createDefaultSchedule(newCampaign.id);
+        }
         res.status(201).json({
             message: 'Campaign created successfully',
             campaign: newCampaign,

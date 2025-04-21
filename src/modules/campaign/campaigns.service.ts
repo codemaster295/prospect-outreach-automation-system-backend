@@ -1,5 +1,6 @@
 import { DB } from '@database/index';
 import { FindOptions, Op } from 'sequelize';
+import { createScheduleBulk } from '../schedule/schedules.services';
 
 const Campaign = DB.Campaigns;
 const Template = DB.Templates;
@@ -31,6 +32,27 @@ export const updateCampaignById = async (
     },
 ) => {
     return await Campaign.update(data, { where: { id } });
+};
+
+export const createDefaultSchedule = async (campaignId: string) => {
+    const days = [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+    ];
+    const defaultSchedule = days.map((day: string) => ({
+        day,
+        count: 5,
+        delay: 300000, // 5 minutes
+        campaign: campaignId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    }));
+    return await createScheduleBulk(defaultSchedule);
 };
 
 export const updateCampaign = async (fields: any, where: any) => {
