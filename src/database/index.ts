@@ -17,7 +17,7 @@ import {
 } from '@/config';
 import MailboxConfigModel from './models/mailboxconfig.model';
 import SentEmailModel from './models/sentemail.model';
-
+import ScheduleModel from './models/schedule.model';
 const sequelize = new Sequelize.Sequelize(
     DB_DATABASE || 'prospect-db',
     DB_USERNAME || 'root',
@@ -44,6 +44,7 @@ const DB = {
     Mailbox: MailboxModel(sequelize),
     MailboxConfig: MailboxConfigModel(sequelize),
     SentEmail: SentEmailModel(sequelize),
+    Schedules: ScheduleModel(sequelize),
     sequelize, // connection instance (RAW queries)
     Sequelize, // library
 };
@@ -51,5 +52,6 @@ const DB = {
 DB.Campaigns.associate(DB);
 DB.Mailbox.associate(DB);
 DB.SentEmail.associate(DB);
+DB.Schedules.associate(DB);
 
 export { DB };

@@ -8,6 +8,7 @@ import templateRouter from '@/modules/templates/templates.routes';
 import campaignRouter from '@/modules/campaign/campaigns.routes';
 import mailboxRouter from '@/modules/mailboxes/mailboxes.routes';
 import mailboxConfigRouter from '@/modules/mailbox-config/mailbox-config.routes';
+import scheduleRouter from '@/modules/schedule/schedule.routes';
 const router = express.Router();
 
 router.use('/user', requiresAuth, userRouter);
@@ -18,4 +19,5 @@ router.use('/templates', templateRouter);
 router.use('/campaigns', requiresAuth, campaignRouter);
 router.use('/mailboxes', mailboxRouter);
 router.use('/mailbox-config', mailboxConfigRouter);
+router.use('/schedules', scheduleRouter);
 export default router;
