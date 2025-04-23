@@ -119,6 +119,11 @@ export const changeCampaignTemplate = async ({
     const updated = await Campaign.findOne({ where: { id: campaignId } });
     return updated;
 };
+export const getPaginatedCampaign = (query: any) => {
+    return Campaign.findAndCountAll(query);
+};
+
+
 
 export default {
     getAllCampaign,

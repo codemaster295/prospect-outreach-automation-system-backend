@@ -8,6 +8,7 @@ import {
     campaignLaunch,
     changeCampaignTemplate,
     bulkDeleteCampaigns,
+    getPaginatedCampaign,
     createDefaultSchedule,
 } from './campaigns.service';
 import { getUserProfile } from '../user/user.service';
@@ -15,17 +16,21 @@ import { Op } from 'sequelize';
 import { getSentEmail } from '../sent-emails/sent-email.services';
 
 export const getAllCampaigns = async (
-    req: Request,
+    req: Request,   
     res: Response,
 ): Promise<void> => {
     try {
         const owner = req.user?.sub;
-        const { search = '' } = req.query;
+        const search = (req.query.search as string) || '';
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const isPagination = !!req.query.page || !!req.query.limit;
+        const offset = (page - 1) * limit;
         if (!owner) {
             res.status(401).json({ message: 'Unauthorized' });
             return;
         }
-        const campaigns = await getAllCampaign({
+        const { rows: campaigns, count: total } = await getPaginatedCampaign({
             where: {
                 owner,
                 name: {
@@ -47,6 +52,8 @@ export const getAllCampaigns = async (
                 'audience',
                 'template',
             ],
+            offset,
+            limit,
             order: [['createdAt', 'DESC']],
         });
         const user = await getUserProfile(owner);
@@ -60,6 +67,14 @@ export const getAllCampaigns = async (
         res.status(200).json({
             message: 'Campaigns retrieved successfully',
             campaigns: campaignsData,
+        hasMore: page < Math.ceil(total / limit),
+
+            pagination: {
+                total,
+                totalPages: Math.ceil(total / limit),
+                currentPage: page,
+                perPage: limit,
+            },
         });
     } catch (error: any) {
         console.error('Error in getAllCampaigns:', error);
