@@ -60,6 +60,7 @@ export const getAllfiledata = async (
         res.status(200).json({
             message: 'Files retrieved successfully',
             files,
+            hasMore:  page < Math.ceil(total / limit),
             pagination: {
                 total,
                 totalPages: Math.ceil(total / limit),
