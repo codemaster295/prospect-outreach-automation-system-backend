@@ -69,6 +69,8 @@ export const getAllContacts = async (
         res.status(200).json({
             message: 'Data retrieved successfully',
             data: contacts,
+        hasMore: page < Math.ceil(total / limit),
+
             pagination: {
                 total,
                 totalPages: Math.ceil(total / limit),
@@ -180,6 +182,8 @@ export const getContactByFileId = async (
     });
     res.status(200).json(contacts);
 };
+
+  
 export const deleteContactsBulk = async (
     req: Request,
     res: Response,
@@ -202,8 +206,8 @@ export const deleteContactsBulk = async (
             where: {
                 id: {
                     [Op.in]: ids,
-                    userId,
                 },
+                userId,
             },
         });
         res.status(200).json({

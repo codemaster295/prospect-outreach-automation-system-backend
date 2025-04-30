@@ -10,6 +10,7 @@ export class FileModel
 {
     id?: string | undefined;
     fileUrl!: string;
+    filename!:string;
     uploadedBy!: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;
@@ -26,6 +27,10 @@ export default function (sequelize: Sequelize): typeof FileModel {
                 defaultValue: DataTypes.UUIDV4,
             },
             fileUrl: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            filename: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
