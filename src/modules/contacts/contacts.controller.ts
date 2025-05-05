@@ -11,10 +11,12 @@
         try {
             const userId = req.user?.sub;
             const { fileId } = req.params;
+            const campaignId = req.query.campaignId as string;
             if (!userId) {
                 res.status(404).json({ error: 'User not found' });
                 return;
             }
+           
             const search = (req.query.search as string) || '';
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
@@ -61,6 +63,33 @@
                         userId,
                         ...searchFilter,
                     },
+                    include: campaignId
+                ? [
+                      {
+                          association: 'sentEmails',
+                          attributes: ['id', 'status', 'campaignId'],
+                          where: {
+                              campaignId: {
+                                  [Op.ne]: campaignId, 
+                              },
+                          },
+                          required: false, 
+                      },
+                  ]:[],
+
+                // only panding emails
+                // include: campaignId
+                //     ? [
+                //         {
+                //             association: 'sentEmails',
+                //             attributes: ['id', 'status', 'campaignId'],
+                //             where: {
+                //                 campaignId,
+                //                 status: 'pending',
+                //             },
+                //             required: true, // ensures we ONLY get contacts with pending emails for this campaign
+                //         },
+                //     ] : [],
                     offset,
                     limit,
                     order: [['createdAt', 'DESC']],
@@ -76,7 +105,7 @@
                     totalPages: Math.ceil(total / limit),
                     currentPage: page,
                     perPage: limit,
-                },
+                },  
             });
         } catch (error: any) {
             console.error('Error in getAllContacts:', error);
@@ -94,7 +123,7 @@
         try {
             const userId = req.user?.sub;
             const { fileId } = req.params;
-
+     
             if (!userId) {
                 res.status(404).json({ error: 'User not found' });
                 return;
@@ -191,7 +220,7 @@
         try {
             const userId = req.user?.sub;
             const { ids } = req.body;
-
+            
             if (!userId) {
                 res.status(404).json({ error: 'User not found' });
                 return;
