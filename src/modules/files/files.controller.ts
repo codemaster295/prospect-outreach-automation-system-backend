@@ -60,6 +60,7 @@ export const getAllfiledata = async (
         res.status(200).json({
             message: 'Files retrieved successfully',
             files,
+            hasMore:  page < Math.ceil(total / limit),
             pagination: {
                 total,
                 totalPages: Math.ceil(total / limit),
@@ -138,6 +139,7 @@ export const createFiles = async (req: Request, res: Response) => {
         const frontend_url = `${process.env.FRONTEND_URL}/s/${user}/${file_uuid}/${file_name}`;
         const fileData = await createFile({
             fileUrl: frontend_url,
+            filename:file_name,
             uploadedBy: user,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
