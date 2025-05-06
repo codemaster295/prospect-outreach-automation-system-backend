@@ -63,33 +63,15 @@
                         userId,
                         ...searchFilter,
                     },
-                    include: campaignId
-                ? [
-                      {
-                          association: 'sentEmails',
-                          attributes: ['id', 'status', 'campaignId'],
-                          where: {
-                              campaignId: {
-                                  [Op.ne]: campaignId, 
-                              },
-                          },
-                          required: false, 
-                      },
-                  ]:[],
-
-                // only panding emails
-                // include: campaignId
-                //     ? [
-                //         {
-                //             association: 'sentEmails',
-                //             attributes: ['id', 'status', 'campaignId'],
-                //             where: {
-                //                 campaignId,
-                //                 status: 'pending',
-                //             },
-                //             required: true, // ensures we ONLY get contacts with pending emails for this campaign
-                //         },
-                //     ] : [],
+                    include: {
+                        association: 'emailSent',
+                        attributes: ['id'],
+                        where: {
+                            campaignId
+                        },
+                        required: false, 
+                        as:"emailSent"
+                    },
                     offset,
                     limit,
                     order: [['createdAt', 'DESC']],

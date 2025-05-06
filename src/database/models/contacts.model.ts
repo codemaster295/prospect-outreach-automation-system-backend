@@ -29,6 +29,12 @@ export class ContactsModel
     public createdAt: string | undefined;
     public updatedAt: string | undefined;
     public deletedAt: string | undefined;
+    static associate(models: any) {
+        ContactsModel.hasMany(models.SentEmail,{
+            foreignKey:"to",
+            as:"emailSent"
+        })
+    }
 }
 
 export default function (sequelize: Sequelize): typeof ContactsModel {

@@ -53,5 +53,6 @@ DB.Campaigns.associate(DB);
 DB.Mailbox.associate(DB);
 DB.SentEmail.associate(DB);
 DB.Schedules.associate(DB);
+DB.Contacts.associate(DB)
 
 export { DB };
