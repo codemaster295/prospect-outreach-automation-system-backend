@@ -9,6 +9,7 @@ import campaignRouter from '@/modules/campaign/campaigns.routes';
 import mailboxRouter from '@/modules/mailboxes/mailboxes.routes';
 import mailboxConfigRouter from '@/modules/mailbox-config/mailbox-config.routes';
 import scheduleRouter from '@/modules/schedule/schedule.routes';
+import analyticsRouter from '@/modules/analytics/analytics.routes';
 const router = express.Router();
 
 router.use('/user', requiresAuth, userRouter);
@@ -20,4 +21,5 @@ router.use('/campaigns', requiresAuth, campaignRouter);
 router.use('/mailboxes', mailboxRouter);
 router.use('/mailbox-config', mailboxConfigRouter);
 router.use('/schedules', scheduleRouter);
+router.use('/images', analyticsRouter);
 export default router;

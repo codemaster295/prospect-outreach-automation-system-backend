@@ -123,8 +123,6 @@ export const getPaginatedCampaign = (query: any) => {
     return Campaign.findAndCountAll(query);
 };
 
-
-
 export default {
     getAllCampaign,
     createCampaign,

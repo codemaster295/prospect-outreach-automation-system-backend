@@ -30,10 +30,10 @@ export class ContactsModel
     public updatedAt: string | undefined;
     public deletedAt: string | undefined;
     static associate(models: any) {
-        ContactsModel.hasMany(models.SentEmail,{
-            foreignKey:"to",
-            as:"emailSent"
-        })
+        ContactsModel.hasMany(models.SentEmail, {
+            foreignKey: 'to',
+            as: 'emailSent',
+        });
     }
 }
 
