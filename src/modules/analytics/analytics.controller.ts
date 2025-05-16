@@ -3,6 +3,7 @@ import * as sentEmailService from '@/modules/sent-emails/sent-email.services';
 import * as analyticsService from '@/modules/analytics/analytics.service';
 import { AnalyticsKey } from '@/interfaces/analytics.interfaces';
 import logger from '@/utils/logger';
+import { Op } from 'sequelize';
 export const recordOpenTracking = async (req: Request, res: Response) => {
     const { contactId, campaignId } = req.params;
     const imgBuffer = Buffer.from(
@@ -51,4 +52,24 @@ export const recordOpenTracking = async (req: Request, res: Response) => {
     logger.info(
         `(Open tracking recorded) Open tracking recorded for contact ${contactId} and campaign ${campaignId}`,
     );
+};
+
+export const getCampaignAnalytics = async (req: Request, res: Response) => {
+    try {
+        const { campaignId } = req.params;
+        const { startDate, endDate } = req.query;
+        const openTracking = await analyticsService.getCountAnalytics({
+            where: {
+                campaignId,
+                key: AnalyticsKey.OPEN_TRACKING,
+                createdAt: {
+                    [Op.between]: [startDate, endDate],
+                },
+            },
+        });
+        res.status(200).send({ openTracking });
+    } catch (error) {
+        logger.error(error);
+        res.status(500).send({ message: 'Internal server error' });
+    }
 };

@@ -7,4 +7,6 @@ analyticsRouter.get(
     analyticController.recordOpenTracking,
 );
 
+analyticsRouter.get('/:campaignId', analyticController.getCampaignAnalytics);
+
 export default analyticsRouter;

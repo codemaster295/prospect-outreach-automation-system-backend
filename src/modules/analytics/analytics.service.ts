@@ -9,3 +9,7 @@ export const recordAnalytics = async (data: Analytics) => {
 export const getAnalytics = async (query: FindOptions) => {
     return await AnalyticsModel.findOne(query);
 };
+
+export const getCountAnalytics = async (query: FindOptions) => {
+    return await AnalyticsModel.count(query);
+};
