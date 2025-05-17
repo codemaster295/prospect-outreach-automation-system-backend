@@ -22,5 +22,6 @@ router.use('/mailboxes', mailboxRouter);
 router.use('/mailbox-config', mailboxConfigRouter);
 router.use('/schedules', scheduleRouter);
 router.use('/images', analyticsRouter);
+router.use('/website-visit', analyticsRouter);
 router.use('/analytics', analyticsRouter);
 export default router;

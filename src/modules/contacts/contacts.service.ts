@@ -22,19 +22,28 @@ export const getPaginatedContacts = (query: any) => {
 };
 export const updateAudienceByFileId = async ({
     fileId,
-    audience,   
-  }: {
-    fileId: string; 
+    audience,
+}: {
+    fileId: string;
     userId: string;
     audience: string;
-  }) => {
+}) => {
     const [updatedCount] = await Campaign.update(
-      { audience },
-      {
-        where: {
-          id: fileId,
+        { audience },
+        {
+            where: {
+                id: fileId,
+            },
         },
-      },
     );
     return updatedCount;
-  };
+};
+
+export const getCountOfContacts = async (fileId: string) => {
+    const count = await Contact.count({
+        where: {
+            fileId,
+        },
+    });
+    return count;
+};

@@ -30,7 +30,7 @@ export class SentEmailModel
         });
         SentEmailModel.belongsTo(models.Contacts, {
             foreignKey: 'to',
-            as: 'to_contacts',
+            as: 'contact',
         });
         SentEmailModel.belongsTo(models.Templates, {
             foreignKey: 'template',

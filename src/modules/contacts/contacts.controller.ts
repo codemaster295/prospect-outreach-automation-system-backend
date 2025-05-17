@@ -98,6 +98,17 @@ export const getAllContacts = async (
     }
 };
 
+export const getCountOfContacts = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
+    const { fileId } = req.params;
+    const count = await ContactService.getCountOfContacts(fileId);
+    res.status(200).json({
+        message: 'Count of contacts retrieved successfully',
+        count,
+    });
+};
 export const createContact = async (
     req: Request,
     res: Response,

@@ -13,3 +13,9 @@ export const getAnalytics = async (query: FindOptions) => {
 export const getCountAnalytics = async (query: FindOptions) => {
     return await AnalyticsModel.count(query);
 };
+export const getAllAnalyticsCount = async (query: FindOptions) => {
+    return await AnalyticsModel.count(query);
+};
+export const getAllAnalytics = async (query: FindOptions) => {
+    return await AnalyticsModel.findAll(query);
+};

@@ -27,7 +27,7 @@ export class AnalyticsModel
 
         AnalyticsModel.belongsTo(models.SentEmail, {
             foreignKey: 'sentEmailId',
-            as: 'sentEmail',
+            as: 'email',
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
         });

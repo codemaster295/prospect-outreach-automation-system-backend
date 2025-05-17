@@ -8,5 +8,14 @@ analyticsRouter.get(
 );
 
 analyticsRouter.get('/:campaignId', analyticController.getCampaignAnalytics);
+analyticsRouter.get(
+    '/:campaignId/contacts/:trackingKey',
+    analyticController.getCampaignContactsAnalytics,
+);
+
+analyticsRouter.get(
+    '/click/:campaignId/:contactId',
+    analyticController.recordClickTracking,
+);
 
 export default analyticsRouter;
