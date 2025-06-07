@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getFile } from '../files/files.service';
 import * as ContactService from './contacts.service';
 import { Op, fn, col, where } from 'sequelize';
-
+import Papa from 'papaparse';
 export const getAllContacts = async (
     req: Request,
     res: Response,
@@ -122,6 +122,10 @@ export const createContact = async (
             return;
         }
         const { mappings } = req.body;
+        if (!mappings) {
+            res.status(400).json({ error: 'Mappings are required' });
+            return;
+        }
         const file = await getFile(fileId);
         if (!file) {
             res.status(404).json({ error: 'File not found' });
@@ -137,48 +141,38 @@ export const createContact = async (
             res.status(400).json({ error: 'Invalid file type' });
             return;
         }
-        //read the buffer as CSV and parse it
         const csvData = new TextDecoder().decode(fileData.data);
-        const contacts = csvData
-            ?.split('\n')
-            .map((line: string) => line.split(','));
 
-        // take first row as header and rest as data
-        const header = contacts[0];
-        const data = contacts.slice(1);
-
-        //map the header to the data with mappings
-        const mappedData = data.map((row: string[]) => {
-            const data: any = {};
-            for (let i = 0; i < header.length; i++) {
-                data[header[i]] = row[i];
-            }
-            return data;
+        //reverse the mappings
+        const reverseMapping: any = {};
+        Object.keys(mappings).forEach(key => {
+            reverseMapping[mappings[key]] = key;
         });
-
-        //combine the mapped data with the mappings
-        const combinedData = mappedData.map((row: any) => {
-            return Object.keys(mappings).reduce((acc: any, curr: any) => {
-                acc[curr] = row[mappings[curr]];
-                return acc;
-            }, {});
-        });
-        const prepareData = [];
-        for (let i = 0; i < combinedData.length; i++) {
-            if (combinedData[i].email) {
-                prepareData.push({
-                    ...combinedData[i],
-                    userId: userId,
-                    fileId: fileId,
+        //read the buffer as CSV and parse it
+        Papa.parse(csvData, {
+            header: true,
+            skipEmptyLines: true,
+            dynamicTyping: true,
+            transformHeader: (header: string) => {
+                return reverseMapping[header] || header;
+            },
+            complete: async (results: any) => {
+                if (results.errors.length) {
+                    res.status(400).json({ error: 'Invalid file format' });
+                    return;
+                }
+                const prepareData = results.data.map((row: any) => {
+                    return {
+                        ...row,
+                        userId: userId,
+                        fileId: fileId,
+                    };
                 });
-            }
-        }
-        const createdContacts = await ContactService.createBulkContacts(
-            prepareData,
-        );
-        res.status(200).json({
-            message: 'Contacts created successfully',
-            createdContacts,
+                await ContactService.createBulkContacts(prepareData);
+                res.status(200).json({
+                    message: 'Contacts created successfully',
+                });
+            },
         });
     } catch (error: any) {
         console.error('Error in createContact:', error);
