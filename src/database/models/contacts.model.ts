@@ -55,19 +55,19 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
                 allowNull: false,
             },
             firstName: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('medium'),
                 allowNull: true,
             },
             lastName: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('medium'),
                 allowNull: true,
             },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('long'),
                 allowNull: true,
             },
             companyName: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('long'),
                 allowNull: true,
             },
             email: {
@@ -83,11 +83,11 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
                 allowNull: true,
             },
             industry: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('long'),
                 allowNull: true,
             },
             personLinkedinUrl: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('long'),
                 allowNull: true,
             },
             website: {
@@ -99,7 +99,7 @@ export default function (sequelize: Sequelize): typeof ContactsModel {
                 allowNull: true,
             },
             companyAddress: {
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT('long'),
                 allowNull: true,
             },
             companyCity: {

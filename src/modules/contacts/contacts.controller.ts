@@ -161,6 +161,13 @@ export const createContact = async (
                     res.status(400).json({ error: 'Invalid file format' });
                     return;
                 }
+                console.log(
+                    results.data?.every((row: any) =>
+                        new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(
+                            row.email,
+                        ),
+                    ),
+                );
                 const prepareData = results.data.map((row: any) => {
                     return {
                         ...row,
