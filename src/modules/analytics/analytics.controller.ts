@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as sentEmailService from '@/modules/sent-emails/sent-email.services';
 import * as analyticsService from '@/modules/analytics/analytics.service';
 import { AnalyticsKey } from '@/interfaces/analytics.interfaces';
-import logger from '@/utils/logger';
+import {logger} from '@/utils/logger';
 import { Op } from 'sequelize';
 export const recordOpenTracking = async (req: Request, res: Response) => {
     const { contactId, campaignId } = req.params;

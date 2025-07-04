@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import router from '@routes/routes';
-import logger from '@utils/logger';
+import {logger} from '@utils/logger';
 import { DB } from '@database/index';
 import { PORT } from './config';
 import { errorHandler } from './utils/error-handler';

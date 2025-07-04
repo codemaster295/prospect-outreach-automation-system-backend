@@ -1,4 +1,4 @@
-import logger from '@/utils/logger';
+import {logger} from '@/utils/logger';
 import Sequelize from 'sequelize';
 import FileModel from './models/files.model';
 import ContactsModel from './models/contacts.model';
@@ -19,6 +19,8 @@ import MailboxConfigModel from './models/mailboxconfig.model';
 import SentEmailModel from './models/sentemail.model';
 import ScheduleModel from './models/schedule.model';
 import AnalyticsModel from './models/analytics.model';
+import KnowledgeModel from './models/knowledge.model';
+
 const sequelize = new Sequelize.Sequelize(
     DB_DATABASE || 'prospect-db',
     DB_USERNAME || 'root',
@@ -26,7 +28,8 @@ const sequelize = new Sequelize.Sequelize(
     {
         host: DB_HOST || 'localhost',
         dialect: DB_DIALECT as Sequelize.Dialect,
-        port: parseInt(DB_PORT || '3306'),
+        // port: parseInt(DB_PORT || '3306'),
+       port: Number(DB_PORT) || 3306,
         logging: (query: string, time: number | undefined) => {
             logger.info(time + 'ms' + ' ' + query);
         },
@@ -47,6 +50,7 @@ const DB = {
     SentEmail: SentEmailModel(sequelize),
     Analytics: AnalyticsModel(sequelize),
     Schedules: ScheduleModel(sequelize),
+    Knowledge:KnowledgeModel(sequelize),
     sequelize, // connection instance (RAW queries)
     Sequelize, // library
 };
@@ -57,5 +61,6 @@ DB.SentEmail.associate(DB);
 DB.Schedules.associate(DB);
 DB.Contacts.associate(DB);
 DB.Analytics.associate(DB);
+DB.Knowledge.associate(DB);
 
 export { DB };

@@ -10,6 +10,7 @@ import mailboxRouter from '@/modules/mailboxes/mailboxes.routes';
 import mailboxConfigRouter from '@/modules/mailbox-config/mailbox-config.routes';
 import scheduleRouter from '@/modules/schedule/schedule.routes';
 import analyticsRouter from '@/modules/analytics/analytics.routes';
+import knowledgeRouter from '@/modules/knowledge/knowledge.routes';
 const router = express.Router();
 
 router.use('/user', requiresAuth, userRouter);
@@ -24,4 +25,6 @@ router.use('/schedules', scheduleRouter);
 router.use('/images', analyticsRouter);
 router.use('/website-visit', analyticsRouter);
 router.use('/analytics', analyticsRouter);
+router.use('/knowledge', knowledgeRouter);
+
 export default router;
