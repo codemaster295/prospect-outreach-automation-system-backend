@@ -1,8 +1,8 @@
 export interface Files {
     id?: string;
     fileUrl: string;
-    filename:String;
-    campaignId?: string | undefined;
+    filename: string;
+    campaignId?: string;
     uploadedBy: string;
     createdAt: string | undefined;
     updatedAt: string | undefined;

@@ -68,11 +68,13 @@ export const getCampaignAnalytics = async (req: Request, res: Response) => {
             return;
         }
 
-        const parsedKeys = Array.isArray(keys)
-            ? keys
-            : typeof keys === 'string'
-            ? [keys]
-            : [];
+        let parsedKeys: string[] = [];
+
+        if (Array.isArray(keys)) {
+            parsedKeys = keys;
+        } else if (typeof keys === 'string') {
+            parsedKeys = [keys];
+        }
 
         if (parsedKeys.length === 0) {
             res.status(400).send({

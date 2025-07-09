@@ -26,11 +26,6 @@ export const createVariables = async (
 ): Promise<void> => {
     try {
         const { name, value } = req.body;
-
-        // if (!name || !value) {
-        //     res.status(400).json({ message: 'Name and value are required' });
-        //     return;
-        // }
         if (
             !name ||
             !value ||

@@ -1,8 +1,8 @@
 import { DB } from '@/database/index';
-import { mailboxConfig } from '@/interfaces/mailboxconfig.interfaces';
+import { MailboxConfigInput } from '@/interfaces/mailboxconfig.interfaces';
 const MailboxConfig = DB.MailboxConfig;
 export const createOrUpdateMailboxConfig = async (
-    config: mailboxConfig,
+    config: MailboxConfigInput,
     mailboxId: string,
     owner: string,
 ) => {

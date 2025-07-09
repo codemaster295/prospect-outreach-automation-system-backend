@@ -28,15 +28,11 @@ export const updateTemplateById = async (id: string, data: any) => {
     return await Template.update(data, { where: { id } });
 };
 
-//     // await template.update({ subject, body, owner });
-//     // return template;
-// };
-
 export const deleteTemplate = async (id: string) => {
     const template = await Template.findByPk(id);
     if (!template) return null;
 
-    await template.destroy(); // Soft delete due to `paranoid: true`
+    await template.destroy(); 
     return template;
 };
 export const getPaginatedTemplate = (query: any) => {

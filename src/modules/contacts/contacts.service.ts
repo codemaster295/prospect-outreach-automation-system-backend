@@ -1,5 +1,5 @@
 import { DB } from '@database/index';
-import { DestroyOptions, Op } from 'sequelize';
+import { DestroyOptions } from 'sequelize';
 
 const Contact = DB.Contacts;
 const Campaign = DB.Campaigns;

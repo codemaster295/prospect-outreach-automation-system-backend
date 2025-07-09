@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import {
-    getAllTemplate,
     getTemplateById,
     createTemplate,
     updateTemplateById,
@@ -19,9 +18,7 @@ export const getTemplatesUser = async (
     res: Response,
 ): Promise<void> => {
     try {
-        // const templates = await getAllTemplate();
-
-        const userId = req.user?.sub; // `sub` is typically used for user ID in JWT
+        const userId = req.user?.sub; 
 
         if (!userId) {
             res.status(404).json({ error: 'User not found' });

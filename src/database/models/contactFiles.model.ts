@@ -8,7 +8,7 @@ export class ContactFileModel
     extends Model<ContactFiles, ContactFileCreationAttributes>
     implements ContactFiles
 {
-    id?: string | undefined;
+    id?: string;
     fileUrl!: string;
     uploadedBy!: string;
     createdAt: string | undefined;

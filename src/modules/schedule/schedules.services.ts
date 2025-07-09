@@ -1,6 +1,5 @@
 import { DB } from '@/database';
 import Schedule from '@/interfaces/schedule';
-import { where } from 'sequelize';
 const { Schedules } = DB;
 
 export const createScheduleBulk = async (schedules: Schedule[]) => {
@@ -32,17 +31,17 @@ export const updateSchedulesByCampaignId = async (
       throw new Error('Invalid schedules schema');
     }
   
-    // Iterate over each schedule that was updated
+
     const updatedSchedules: Schedule[] = [];
   
     for (const schedule of newSchedules) {
-      // Check if the schedule already exists for this campaign
+
       const existingSchedule = await Schedules.findOne({
         where: { campaign: campaignId, id: schedule.id },
       });
   
       if (existingSchedule) {
-        // If it exists, update the schedule
+
         await Schedules.update(
           {
             count: schedule.count,
@@ -54,7 +53,7 @@ export const updateSchedulesByCampaignId = async (
         );
         updatedSchedules.push({ ...existingSchedule, ...schedule });
       } else {
-        // If it doesn't exist, create a new schedule
+
         const newSchedule = await Schedules.create({
           ...schedule,
           campaign: campaignId,

@@ -8,7 +8,7 @@ export class FileModel
     extends Model<Files, FileCreationAttributes>
     implements Files
 {
-    id?: string | undefined;
+    id?: string;
     fileUrl!: string;
     filename!:string;
     uploadedBy!: string;

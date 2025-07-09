@@ -1,4 +1,4 @@
-import { request, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import {
     getAllFiles,
     createFile,
@@ -135,7 +135,6 @@ export const createFiles = async (req: Request, res: Response) => {
         );
         const file_uuid = payload.file_uuid;
         const file_name = payload.file_name;
-        // const file_path = `pre_md_files/${user}/${file_uuid}`;
         const frontend_url = `${process.env.FRONTEND_URL}/s/${user}/${file_uuid}/${file_name}`;
         const fileData = await createFile({
             fileUrl: frontend_url,

@@ -6,7 +6,7 @@ export class VariablesModel
     extends Model<Variables, VariablesCreationAttributes>
     implements Variables
 {
-    id?: string | undefined;
+    id?: string;
     name!: string;
     value!: string;
     createdAt: string | undefined;

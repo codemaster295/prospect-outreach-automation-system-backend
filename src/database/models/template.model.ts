@@ -6,7 +6,7 @@ export class TemplateModel
     extends Model<Template, TemplateCreationAttributes>
     implements Template
 {
-    id?: string | undefined;
+    id?:string;
     subject!: string;
     body!: string;
     owner!: string;

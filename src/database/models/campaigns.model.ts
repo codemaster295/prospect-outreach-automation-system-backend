@@ -6,7 +6,7 @@ export class CampaignsModel
     extends Model<Campaigns, CampaignsCreationAttributes>
     implements Campaigns
 {
-    id?: string | undefined;
+    id?: string;
     name!: string;
     audience!: string;
     template!: string;

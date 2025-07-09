@@ -12,7 +12,6 @@ export const testSMTPConnection = async (config: SMTPTransport.Options) => {
             if (success) {
                 resolve(success);
             } else {
-                // console.log(error);
                 reject(error);
             }
         });
@@ -45,10 +44,8 @@ export const testImapConnection = async (config: any) => {
         });
 
         imap.once('end', function () {
-            // console.log('Connection ended');
         });
 
-        // let errCount = 0;
         imap.once('error', function (err) {
             reject(err);
         });

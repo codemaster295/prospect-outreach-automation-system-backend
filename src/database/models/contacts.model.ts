@@ -7,7 +7,7 @@ export class ContactsModel
     extends Model<Contacts, ContactCreationAttritubes>
     implements Contacts
 {
-    public id?: string | undefined;
+    public id?: string;
     public userId!: string;
     public fileId!: string;
     public firstName!: string;

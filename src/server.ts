@@ -8,13 +8,14 @@ import { errorHandler } from './utils/error-handler';
 import { swaggerSpec, swaggerUi } from './utils/swagger';
 
 const appServer = express();
+appServer.disable('x-powered-by'); 
 const port = PORT || 5050;
 
 const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200,
 };
-// appServer.use('/api/contacts', contactRouter);
+
 appServer.use((req, res, next) => {
     const startTime = Date.now();
 
@@ -34,17 +35,14 @@ appServer.use((req, res, next) => {
     next();
 });
 
-// Enable CORS
 appServer.use(cors(corsOptions));
 appServer.options('*', cors(corsOptions));
 
-// Middleware for parsing JSON and URL-encoded bodies
 appServer.use(express.json());
 appServer.use(express.urlencoded({ extended: true }));
 
 appServer.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Use the router with the /api prefix
 appServer.use('/', router);
 appServer.use(errorHandler);
 

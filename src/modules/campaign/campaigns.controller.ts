@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import {
     createCampaign,
-    getAllCampaign,
     deleteCampaignById,
     updateCampaignById,
     getCampaign,
@@ -24,7 +23,6 @@ export const getAllCampaigns = async (
         const search = (req.query.search as string) || '';
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
-        const isPagination = !!req.query.page || !!req.query.limit;
         const offset = (page - 1) * limit;
         if (!owner) {
             res.status(401).json({ message: 'Unauthorized' });

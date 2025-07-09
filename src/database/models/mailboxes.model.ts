@@ -9,7 +9,7 @@ export class MailboxModel
     id?: string;
     senderEmail!: string;
     owner!: string;
-    provider!: MailboxType; // Enum values
+    provider!: MailboxType; 
     createdAt: string | undefined;
     updatedAt: string | undefined;
     deletedAt: string | undefined;

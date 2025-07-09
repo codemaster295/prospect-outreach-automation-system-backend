@@ -1,5 +1,5 @@
 import { DB } from '@/database/index';
-import { updateCampaignById } from '../campaign/campaigns.service';
+
 const Mailbox = DB.Mailbox;
 
 export const disconnectMailboxService = async (

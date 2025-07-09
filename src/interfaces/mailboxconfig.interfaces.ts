@@ -9,7 +9,7 @@ export interface MailboxConfig {
     deletedAt: string | undefined;
 }
 
-export interface mailboxConfig {
+export interface MailboxConfigInput {
     key: string;
     value: string;
     mailboxId: string;
