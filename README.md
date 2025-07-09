@@ -101,7 +101,7 @@ Run the test:
 
 ## 📚 API Documentation
 
-Access swagger documentations: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+Access swagger documentations: [https://localhost:5000/api-docs](https://localhost:5000/api-docs)
 
 Swagger will automatically return the documentations based on route file annotation.
 
@@ -145,7 +145,7 @@ Let's have a look at this structure:
 **POST** a request to `/api/example`:
 
 ```bash
-curl --request POST   --url http://localhost:5000/api/auth/signup
+curl --request POST   --url https://localhost:5000/api/auth/signup
 ```
 
 Response:

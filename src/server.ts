@@ -12,7 +12,7 @@ appServer.disable('x-powered-by');
 const port = PORT || 5050;
 
 const allowedOrigins = [
-  'http://localhost:3000',
+  'https://localhost:3000',
   'https://prospect-ai.codesprintconsulting.com',
 ];
 

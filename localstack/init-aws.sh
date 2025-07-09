@@ -12,9 +12,9 @@ awslocal s3api put-bucket-cors --bucket prospects-files \
             \"AllowedHeaders\": [\"*\"],
             \"AllowedMethods\": [\"GET\", \"POST\", \"PUT\", \"HEAD\", \"DELETE\"],
             \"AllowedOrigins\": [
-                \"http://localhost:3000\",
+                \"https://localhost:3000\",
                 \"https://app.localstack.cloud\",
-                \"http://app.localstack.cloud\"
+                \"https://app.localstack.cloud\"
             ],
             \"ExposeHeaders\": [\"ETag\"]
             }
