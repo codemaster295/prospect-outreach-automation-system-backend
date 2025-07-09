@@ -1,5 +1,5 @@
 import express from 'express';
-import cors from 'cors';
+import cors, { CorsOptionsDelegate } from 'cors';
 import router from '@routes/routes';
 import logger from '@utils/logger';
 import { DB } from '@database/index';
@@ -11,10 +11,24 @@ const appServer = express();
 appServer.disable('x-powered-by'); 
 const port = PORT || 5050;
 
-const corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200,
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://prospect-ai.codesprintconsulting.com',
+];
+
+const corsOptions: CorsOptionsDelegate = (req, callback) => {
+   const origin = req.headers.origin;
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, {
+      origin: true,
+      optionsSuccessStatus: 200,
+    });
+  } else {
+    callback(new Error('Not allowed by CORS'));
+  }
 };
+appServer.use(cors(corsOptions));
+appServer.options('*', cors(corsOptions));
 
 appServer.use((req, res, next) => {
     const startTime = Date.now();
@@ -55,7 +69,7 @@ DB.sequelize
     .then(() => {
         logger.info('Database connected successfully!');
         appServer.listen(port, () => {
-            logger.info(`Server is running on http://localhost:${port}`);
+            logger.info(`Server is running on https://localhost:${port}`);
         });
     })
     .catch(error => {
