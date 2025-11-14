@@ -168,9 +168,15 @@ export const createContact = async (
                         ),
                     ),
                 );
+
                 const prepareData = results.data.map((row: any) => {
                     return {
-                        ...row,
+                        ...Object.fromEntries(
+                            Object.entries(row).map(([key, value]) => [
+                                key,
+                                value?.toString().replace(/[^\x00-\x7F]/g, ''),
+                            ]),
+                        ),
                         userId: userId,
                         fileId: fileId,
                     };
